@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ref, onValue, push, set, remove } from "firebase/database";
+import { ref, onValue, push, set, remove, update } from "firebase/database";
 import { database } from "@/lib/firebase";
 
 export interface ProcessedOrder {
@@ -14,6 +14,7 @@ export interface ProcessedOrder {
   timestamp: number;
   createdAtIso: string;
   createdByEmail: string;
+  sentToCaixa?: boolean;
 }
 
 export function useProcessedOrders() {
@@ -76,6 +77,15 @@ export function useProcessedOrders() {
       throw error;
     }
   };
+  const markAsSentToCaixa = async (id: string) => {
+    try {
+      const orderRef = ref(database, `processed_orders/${id}`);
+      await update(orderRef, { sentToCaixa: true });
+    } catch (error: any) {
+      console.error("Erro ao atualizar status do lote processado:", error);
+      throw error;
+    }
+  };
 
-  return { orders, loading, addProcessedOrder, deleteProcessedOrder };
+  return { orders, loading, addProcessedOrder, deleteProcessedOrder, markAsSentToCaixa };
 }
