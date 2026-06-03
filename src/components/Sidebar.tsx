@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Receipt, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart, FolderOpen, Map } from "lucide-react";
+import { LayoutDashboard, Receipt, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart, FolderOpen, Map, CircleUser } from "lucide-react";
 
 type SubRoute = { name: string; path: string; icon: any };
 type RouteGroup = { 
@@ -29,7 +29,7 @@ export function Sidebar() {
     routes = [
       { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
       {
-        name: "CONFIGURAÇÕES", icon: Settings,
+        name: "PERFIL", icon: CircleUser,
         subRoutes: [
           { name: "Sair", path: "#logout", icon: LogOut },
         ]
@@ -40,7 +40,7 @@ export function Sidebar() {
       { name: "PROJETOS", path: "/projetos", icon: FolderOpen },
       { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
       {
-        name: "CONFIGURAÇÕES", icon: Settings,
+        name: "PERFIL", icon: CircleUser,
         subRoutes: [
           { name: "Sair", path: "#logout", icon: LogOut },
         ]
@@ -73,7 +73,7 @@ export function Sidebar() {
         ]
       },
       {
-        name: "CONFIGURAÇÕES", icon: Settings,
+        name: "PERFIL E CONFIGURAÇÕES", icon: CircleUser,
         subRoutes: role === 'tesoureiro' ? [
           { name: "Config. Avançadas", path: "/configuracoes", icon: Settings },
           { name: "Sair", path: "#logout", icon: LogOut },
