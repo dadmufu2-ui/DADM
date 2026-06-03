@@ -69,8 +69,9 @@ export default function MCPPage() {
   
   // Matrix calculations
   const calculateWinners = () => {
-    if (!selectedBatch) return { winners: {}, supplierTotalsBase: {} };
+    if (!selectedBatch) return { winners: {}, realCosts: {}, supplierTotalsBase: {} };
     const winners: Record<string, { supplierId: string, unitCost: number }> = {};
+    const realCosts: Record<string, Record<string, number>> = {};
     const supplierTotalsBase: Record<string, number> = {};
 
     // 1. Calculate base totals for freight distribution
@@ -84,8 +85,10 @@ export default function MCPPage() {
     Object.entries(selectedBatch.items).forEach(([itemId, item]) => {
       let lowestCost = Infinity;
       let winnerId = "";
+      realCosts[itemId] = {};
 
       Object.entries(item.quotes || {}).forEach(([suppId, quote]) => {
+        if (!quote.basePrice) return;
         const itemBaseTotal = quote.basePrice * item.quantity;
         
         const icmsVal = quote.icmsType === '%' ? itemBaseTotal * (Number(quote.icms || 0) / 100) : Number(quote.icms || 0) * item.quantity;
@@ -103,6 +106,8 @@ export default function MCPPage() {
         const realTotalCost = itemTotalWithTaxes + allocatedFreight;
         const realUnitCost = realTotalCost / item.quantity;
 
+        realCosts[itemId][suppId] = realUnitCost;
+
         if (realUnitCost < lowestCost) {
           lowestCost = realUnitCost;
           winnerId = suppId;
@@ -114,10 +119,10 @@ export default function MCPPage() {
       }
     });
 
-    return { winners, supplierTotalsBase };
+    return { winners, realCosts, supplierTotalsBase };
   };
 
-  const { winners } = useMemo(() => calculateWinners(), [selectedBatch]);
+  const { winners, realCosts } = useMemo(() => calculateWinners(), [selectedBatch]);
 
   return (
     <div className="space-y-6 pb-10">
@@ -406,7 +411,7 @@ export default function MCPPage() {
                                 <div className="mt-2 text-center pt-2 border-t border-gray-200 dark:border-zinc-700">
                                   <span className="text-[10px] text-gray-500">Custo Real Un:</span><br/>
                                   <span className={`font-bold ${isWinner ? 'text-emerald-700 dark:text-emerald-400' : 'text-gray-700 dark:text-gray-300'}`}>
-                                    {quote.basePrice > 0 ? (winners[itemId]?.supplierId === suppId ? formatCurrency(winners[itemId].unitCost) : 'Calculando...') : '-'}
+                                    {quote.basePrice > 0 ? (realCosts[itemId]?.[suppId] !== undefined ? formatCurrency(realCosts[itemId][suppId]) : 'Calculando...') : '-'}
                                   </span>
                                 </div>
                               </td>
