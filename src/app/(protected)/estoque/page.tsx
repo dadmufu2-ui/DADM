@@ -86,6 +86,13 @@ export default function EstoquePage() {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   };
 
+  const getFontSize = (value: number) => {
+    const strLen = formatCurrency(value).length;
+    if (strLen > 14) return "text-lg";
+    if (strLen > 11) return "text-xl";
+    return "text-2xl";
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -289,17 +296,17 @@ export default function EstoquePage() {
         </div>
 
         <div className="grid grid-cols-3 gap-8 mb-12">
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Custo Total Imobilizado</h3>
-            <p className="text-2xl font-bold text-black">{formatCurrency(totalCost)}</p>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Custo Imobilizado</h3>
+            <p className={`${getFontSize(totalCost)} font-bold text-black truncate`}>{formatCurrency(totalCost)}</p>
           </div>
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Valor Total de Venda</h3>
-            <p className="text-2xl font-bold text-green-700">{formatCurrency(expectedRevenue)}</p>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Valor de Venda</h3>
+            <p className={`${getFontSize(expectedRevenue)} font-bold text-green-700 truncate`}>{formatCurrency(expectedRevenue)}</p>
           </div>
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Lucro Potencial</h3>
-            <p className="text-2xl font-bold text-blue-700">{formatCurrency(potentialProfit)}</p>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Lucro Potencial</h3>
+            <p className={`${getFontSize(potentialProfit)} font-bold text-blue-700 truncate`}>{formatCurrency(potentialProfit)}</p>
           </div>
         </div>
 
@@ -328,7 +335,7 @@ export default function EstoquePage() {
                 <td className="border p-2 text-right">{formatCurrency(item.salePrice)}</td>
                 <td className="border p-2 text-right text-green-700 font-medium">{formatCurrency(item.expectedProfit)}</td>
                 <td className="border p-2 text-[10px] font-mono">
-                  {item.createdByEmail}<br/>
+                  {item.createdByEmail.split('@')[0]}<br/>
                   <span className="text-gray-400">{item.id}</span>
                 </td>
               </tr>

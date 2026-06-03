@@ -18,7 +18,7 @@ export function Header() {
   const displayName = user?.displayName || user?.email?.split('@')[0] || "Usuário";
 
   return (
-    <header className="h-32 bg-transparent flex items-center justify-between px-10 z-10 w-full pt-6">
+    <header className="h-32 bg-transparent flex items-center justify-between px-10 z-10 w-full pt-6 print:hidden">
       <div className="flex flex-col">
         <span className="text-[10px] font-bold text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Equipe Financeira</span>
         <h2 className="text-[26px] font-medium text-white tracking-wide">

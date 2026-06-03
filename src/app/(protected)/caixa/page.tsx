@@ -84,6 +84,13 @@ export default function CaixaPage() {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   };
 
+  const getFontSize = (value: number) => {
+    const strLen = formatCurrency(value).length;
+    if (strLen > 14) return "text-lg";
+    if (strLen > 11) return "text-xl";
+    return "text-2xl";
+  };
+
   const formatDate = (timestamp: number) => {
     return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(timestamp));
   };
@@ -310,17 +317,17 @@ export default function CaixaPage() {
         </div>
 
         <div className="grid grid-cols-3 gap-8 mb-12">
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Total Entradas</h3>
-            <p className="text-2xl font-bold text-green-700">{formatCurrency(dreIncome)}</p>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Total Entradas</h3>
+            <p className={`${getFontSize(dreIncome)} font-bold text-green-700 truncate`}>{formatCurrency(dreIncome)}</p>
           </div>
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Total Saídas</h3>
-            <p className="text-2xl font-bold text-red-700">{formatCurrency(dreExpense)}</p>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Total Saídas</h3>
+            <p className={`${getFontSize(dreExpense)} font-bold text-red-700 truncate`}>{formatCurrency(dreExpense)}</p>
           </div>
-          <div className="border border-gray-300 p-4 rounded bg-gray-50">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Resultado Líquido</h3>
-            <p className={`text-2xl font-bold ${dreBalance >= 0 ? 'text-black' : 'text-red-700'}`}>
+          <div className="border border-gray-300 p-4 rounded bg-gray-50 overflow-hidden">
+            <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 truncate">Resultado Líquido</h3>
+            <p className={`${getFontSize(dreBalance)} font-bold truncate ${dreBalance >= 0 ? 'text-black' : 'text-red-700'}`}>
               {formatCurrency(dreBalance)}
             </p>
           </div>
@@ -347,7 +354,7 @@ export default function CaixaPage() {
                 <td className="border p-2">{tx.category}</td>
                 <td className="border p-2">{tx.type === 'income' ? 'ENTRADA' : 'SAÍDA'}</td>
                 <td className="border p-2 text-right">{formatCurrency(tx.amount)}</td>
-                <td className="border p-2">{tx.createdByEmail}</td>
+                <td className="border p-2">{tx.createdByEmail.split('@')[0]}</td>
                 <td className="border p-2 text-[8px] text-gray-400 font-mono">{tx.id}</td>
               </tr>
             ))}

@@ -19,7 +19,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-[80px] bg-[#121315] text-[#8a8a8a] flex flex-col items-center relative z-20 border-r border-[#1e1f22] shadow-2xl">
+    <aside className="w-[80px] bg-[#121315] text-[#8a8a8a] flex flex-col items-center relative z-20 border-r border-[#1e1f22] shadow-2xl print:hidden">
       <div className="h-32 flex items-center justify-center w-full relative">
         <div className="w-10 h-10 rounded-full bg-[#1e2023] flex items-center justify-center text-white overflow-hidden border border-[#2a2c30] hover:border-white transition-colors cursor-pointer group">
           <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
