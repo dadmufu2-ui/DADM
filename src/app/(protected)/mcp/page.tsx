@@ -69,7 +69,7 @@ export default function MCPPage() {
   
   // Matrix calculations
   const calculateWinners = () => {
-    if (!selectedBatch) return {};
+    if (!selectedBatch) return { winners: {}, supplierTotalsBase: {} };
     const winners: Record<string, { supplierId: string, unitCost: number }> = {};
     const supplierTotalsBase: Record<string, number> = {};
 
@@ -87,8 +87,13 @@ export default function MCPPage() {
 
       Object.entries(item.quotes || {}).forEach(([suppId, quote]) => {
         const itemBaseTotal = quote.basePrice * item.quantity;
-        const taxMult = 1 + ((Number(quote.icms) + Number(quote.ipi) + Number(quote.pisCofins)) / 100);
-        const itemTotalWithTaxes = itemBaseTotal * taxMult;
+        
+        const icmsVal = quote.icmsType === '%' ? itemBaseTotal * (Number(quote.icms || 0) / 100) : Number(quote.icms || 0) * item.quantity;
+        const ipiVal = quote.ipiType === '%' ? itemBaseTotal * (Number(quote.ipi || 0) / 100) : Number(quote.ipi || 0) * item.quantity;
+        const pisCofinsVal = quote.pisCofinsType === '%' ? itemBaseTotal * (Number(quote.pisCofins || 0) / 100) : Number(quote.pisCofins || 0) * item.quantity;
+        // Se for em R$, multiplicamos pela quantidade para ter o custo total do imposto daquele lote de itens
+        
+        const itemTotalWithTaxes = itemBaseTotal + icmsVal + ipiVal + pisCofinsVal;
         
         const suppBaseTotal = supplierTotalsBase[suppId] || 1;
         const freightRatio = itemBaseTotal / suppBaseTotal;
@@ -358,31 +363,40 @@ export default function MCPPage() {
                           </td>
                           
                           {Object.keys(selectedBatch.supplierMeta || {}).map(suppId => {
-                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, icms: 0, ipi: 0, pisCofins: 0 };
+                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, icms: 0, icmsType: '%', ipi: 0, ipiType: '%', pisCofins: 0, pisCofinsType: '%' };
                             const isWinner = winners[itemId]?.supplierId === suppId;
-                            const handleUpdate = (field: keyof typeof quote, val: string) => {
-                              saveQuote(selectedBatch.id, itemId, suppId, { ...quote, [field]: Number(val) });
+                            const handleUpdate = (field: string, val: string | number) => {
+                              saveQuote(selectedBatch.id, itemId, suppId, { ...quote, [field]: val });
                             };
 
                             return (
                               <td key={suppId} className={`p-2 border border-gray-300 dark:border-[#2a2c30] align-top ${isWinner ? 'bg-emerald-50 dark:bg-emerald-900/10 shadow-[inset_0_0_0_2px_#10b981]' : ''}`}>
                                 {isWinner && <div className="text-[10px] text-emerald-600 font-bold uppercase text-center mb-1 flex items-center justify-center gap-1"><CheckCircle2 className="w-3 h-3"/> Vencedor</div>}
-                                <div className="grid grid-cols-2 gap-1 text-[10px]">
-                                  <div className="flex flex-col">
-                                    <span className="text-gray-500">Base (R$)</span>
-                                    <input type="number" step="0.01" value={quote.basePrice || ''} onChange={e => handleUpdate('basePrice', e.target.value)} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
+                                <div className="grid grid-cols-2 gap-1 text-[10px] mb-2">
+                                  <div className="flex flex-col col-span-2">
+                                    <span className="text-gray-500">Base Unit. (R$)</span>
+                                    <input type="number" step="0.01" value={quote.basePrice || ''} onChange={e => handleUpdate('basePrice', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-white dark:bg-zinc-800" />
                                   </div>
                                   <div className="flex flex-col">
-                                    <span className="text-gray-500">ICMS (%)</span>
-                                    <input type="number" step="0.01" value={quote.icms || ''} onChange={e => handleUpdate('icms', e.target.value)} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-gray-500">ICMS</span>
+                                      <button onClick={() => handleUpdate('icmsType', quote.icmsType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.icmsType || '%'}</button>
+                                    </div>
+                                    <input type="number" step="0.01" value={quote.icms || ''} onChange={e => handleUpdate('icms', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
                                   </div>
                                   <div className="flex flex-col">
-                                    <span className="text-gray-500">IPI (%)</span>
-                                    <input type="number" step="0.01" value={quote.ipi || ''} onChange={e => handleUpdate('ipi', e.target.value)} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-gray-500">IPI</span>
+                                      <button onClick={() => handleUpdate('ipiType', quote.ipiType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.ipiType || '%'}</button>
+                                    </div>
+                                    <input type="number" step="0.01" value={quote.ipi || ''} onChange={e => handleUpdate('ipi', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
                                   </div>
-                                  <div className="flex flex-col">
-                                    <span className="text-gray-500">PIS/COF (%)</span>
-                                    <input type="number" step="0.01" value={quote.pisCofins || ''} onChange={e => handleUpdate('pisCofins', e.target.value)} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
+                                  <div className="flex flex-col col-span-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-gray-500">PIS/COF</span>
+                                      <button onClick={() => handleUpdate('pisCofinsType', quote.pisCofinsType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.pisCofinsType || '%'}</button>
+                                    </div>
+                                    <input type="number" step="0.01" value={quote.pisCofins || ''} onChange={e => handleUpdate('pisCofins', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
                                   </div>
                                 </div>
                                 <div className="mt-2 text-center pt-2 border-t border-gray-200 dark:border-zinc-700">

@@ -9,9 +9,12 @@ export interface SupplierMeta {
 
 export interface ItemQuote {
   basePrice: number;
-  icms: number; // in percentage
-  ipi: number; // in percentage
-  pisCofins: number; // in percentage
+  icms?: number;
+  icmsType?: '%' | 'R$';
+  ipi?: number;
+  ipiType?: '%' | 'R$';
+  pisCofins?: number;
+  pisCofinsType?: '%' | 'R$';
 }
 
 export interface QuoteItem {
