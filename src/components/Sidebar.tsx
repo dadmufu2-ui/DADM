@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3 } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { role } = useAuth();
 
   const routes = [
     { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
