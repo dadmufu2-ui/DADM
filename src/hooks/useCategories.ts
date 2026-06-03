@@ -38,5 +38,16 @@ export function useCategories(type: "caixa" | "estoque") {
     }
   };
 
-  return { categories, loading, addCategory };
+  const deleteCategory = async (categoryToDelete: string) => {
+    try {
+      const updatedCategories = categories.filter(c => c !== categoryToDelete);
+      const categoriesRef = ref(database, `categories/${type}`);
+      await set(categoriesRef, updatedCategories);
+    } catch (error) {
+      console.error("Erro ao deletar categoria", error);
+      alert("Erro ao deletar categoria. Verifique suas permissões.");
+    }
+  };
+
+  return { categories, loading, addCategory, deleteCategory };
 }

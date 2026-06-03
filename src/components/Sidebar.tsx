@@ -49,6 +49,17 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {role === 'tesoureiro' && (
+          <Link 
+            href="/configuracoes" 
+            title="CONFIGURAÇÕES AVANÇADAS"
+            className={`flex items-center justify-center w-full h-10 relative transition-all duration-300 group ${pathname === '/configuracoes' ? 'text-white' : 'text-[#8a8a8a] hover:text-[#ffffff]'}`}
+          >
+            {pathname === '/configuracoes' && <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white rounded-r-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>}
+            <Settings className={`w-5 h-5 ${pathname === '/configuracoes' ? 'text-white' : 'text-[#4c4e51] group-hover:text-white'} transition-colors`} />
+          </Link>
+        )}
       </nav>
       
       <div className="p-8 w-full flex justify-center mb-4">

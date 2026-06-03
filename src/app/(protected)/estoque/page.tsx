@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useInventory } from "@/hooks/useInventory";
 import { useCategories } from "@/hooks/useCategories";
-import { Plus, Trash2, Package, Printer } from "lucide-react";
+import { useDeleteRequests } from "@/hooks/useDeleteRequests";
+import { Plus, Trash2, Package, Printer, ShieldAlert } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -29,6 +30,8 @@ export default function EstoquePage() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+
+  const { createRequest } = useDeleteRequests();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -269,13 +272,28 @@ export default function EstoquePage() {
                       {formatCurrency(item.expectedProfit)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {canDelete && (
+                      {(role === "tesoureiro" || role === "coordenador") && (
                         <button 
-                          onClick={() => deleteItem(item.id)}
-                          className="p-2 text-[#4c4e51] hover:text-red-500 transition-colors"
-                          title="Excluir Lote"
+                          onClick={async () => {
+                            if (role === "tesoureiro") {
+                              if (confirm("Excluir definitivamente este lote?")) deleteItem(item.id);
+                            } else {
+                              const reason = prompt("Justificativa para solicitar exclusão deste item:");
+                              if (reason) {
+                                await createRequest({
+                                  collection: "estoque",
+                                  itemId: item.id,
+                                  itemNameOrDesc: `Estoque: ${item.name} (${item.quantity}un) - Motivo: ${reason}`,
+                                  requestedByEmail: user?.email || "unknown"
+                                });
+                                alert("Pedido de exclusão enviado para a Tesouraria.");
+                              }
+                            }
+                          }}
+                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-[#4c4e51] hover:text-red-500' : 'text-[#4c4e51] hover:text-amber-500'}`}
+                          title={role === 'tesoureiro' ? "Excluir Lote" : "Solicitar Exclusão"}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {role === 'tesoureiro' ? <Trash2 className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
                         </button>
                       )}
                     </TableCell>

@@ -3,7 +3,8 @@ import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useCategories } from "@/hooks/useCategories";
-import { Plus, Trash2, Printer } from "lucide-react";
+import { useDeleteRequests } from "@/hooks/useDeleteRequests";
+import { Plus, Trash2, Printer, ShieldAlert } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -26,6 +27,7 @@ export default function CaixaPage() {
   const { role, user } = useAuth();
   const { transactions, loading, addTransaction, deleteTransaction } = useTransactions();
   const { categories, addCategory } = useCategories("caixa");
+  const { createRequest } = useDeleteRequests();
   
   const [isOpen, setIsOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -285,13 +287,28 @@ export default function CaixaPage() {
                       {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {canDelete && (
+                      {(role === "tesoureiro" || role === "coordenador") && (
                         <button 
-                          onClick={() => deleteTransaction(tx.id)}
-                          className="p-2 text-[#4c4e51] hover:text-red-500 transition-colors"
-                          title="Excluir Lançamento"
+                          onClick={async () => {
+                            if (role === "tesoureiro") {
+                              if (confirm("Excluir definitivamente este lançamento?")) deleteTransaction(tx.id);
+                            } else {
+                              const reason = prompt("Justificativa para solicitar exclusão deste lançamento:");
+                              if (reason) {
+                                await createRequest({
+                                  collection: "caixa",
+                                  itemId: tx.id,
+                                  itemNameOrDesc: `Caixa: ${tx.description} (${formatCurrency(tx.amount)}) - Motivo: ${reason}`,
+                                  requestedByEmail: user?.email || "unknown"
+                                });
+                                alert("Pedido de exclusão enviado para a Tesouraria.");
+                              }
+                            }
+                          }}
+                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-[#4c4e51] hover:text-red-500' : 'text-[#4c4e51] hover:text-amber-500'}`}
+                          title={role === 'tesoureiro' ? "Excluir Lançamento" : "Solicitar Exclusão"}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {role === 'tesoureiro' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
                         </button>
                       )}
                     </TableCell>
