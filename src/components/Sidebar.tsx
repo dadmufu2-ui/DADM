@@ -65,7 +65,7 @@ export function Sidebar() {
         )}
       </div>
       
-      <nav className="flex flex-row md:flex-col md:gap-5 w-full items-center justify-around md:justify-center h-full flex-1">
+      <nav className="flex flex-row md:flex-col w-full items-center justify-around md:justify-evenly h-full flex-1 md:py-4">
         {routes.map((route) => {
           const isActive = pathname === route.path || (route.path === '/caixa' && pathname.includes('caixa')) || (route.path === '/estoque' && pathname.includes('estoque'));
           return (
