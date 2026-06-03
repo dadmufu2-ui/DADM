@@ -60,9 +60,7 @@ export default function DashboardPage() {
     <div className="space-y-16 px-4 pb-12">
       {/* First Row of Charts */}
       <div className="space-y-8 bg-white dark:bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] shadow-2xl relative overflow-hidden">
-        {/* Subtle background grid pattern for aesthetics */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e1f22_1px,transparent_1px),linear-gradient(to_bottom,#1e1f22_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 pointer-events-none"></div>
-        
+        {/* Subtle background grid pattern removed as requested */}
         <div className="flex items-center justify-between relative z-10">
           <h3 className="text-[11px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase">Balanço Anual {currentYear} (Entradas vs Gastos)</h3>
           <div className="flex items-center gap-4">

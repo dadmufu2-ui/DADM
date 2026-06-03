@@ -117,7 +117,7 @@ export default function EstoquePage() {
           
           <div className="flex gap-4">
             {role === "tesoureiro" && (
-               <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-200 dark:bg-[#2a2c30] hover:bg-gray-300 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+               <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-900 dark:bg-[#2a2c30] hover:bg-gray-800 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                  <Printer className="w-4 h-4" /> Imprimir Inventário
                </button>
             )}
@@ -249,7 +249,7 @@ export default function EstoquePage() {
                 </TableRow>
               ) : (
                 items.map((item) => (
-                  <TableRow key={item.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-white dark:bg-[#1e2023]/30 transition-colors">
+                  <TableRow key={item.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-gray-50 dark:hover:bg-[#2a2c30] transition-colors">
                     <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
                       {new Date(item.entryDate).toLocaleDateString('pt-BR')}
                       <div className="text-[9px] opacity-50">{item.createdAtIso?.split('T')[0]}</div>

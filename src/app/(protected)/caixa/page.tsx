@@ -137,7 +137,7 @@ export default function CaixaPage() {
           <div className="flex gap-4">
             {role === "tesoureiro" && (
               <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
-                <DialogTrigger className="flex items-center gap-2 bg-gray-200 dark:bg-[#2a2c30] hover:bg-gray-300 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                <DialogTrigger className="flex items-center gap-2 bg-gray-900 dark:bg-[#2a2c30] hover:bg-gray-800 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Printer className="w-4 h-4" /> Relatório DRE
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
@@ -269,7 +269,7 @@ export default function CaixaPage() {
                 </TableRow>
               ) : (
                 transactions.map((tx) => (
-                  <TableRow key={tx.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-white dark:bg-[#1e2023]/30 transition-colors">
+                  <TableRow key={tx.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-gray-50 dark:hover:bg-[#2a2c30] transition-colors">
                     <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
                       {formatDate(tx.timestamp)}
                       <div className="text-[9px] opacity-50">{tx.createdAtIso?.split('T')[0]}</div>
@@ -283,7 +283,7 @@ export default function CaixaPage() {
                     <TableCell className="text-[10px] text-gray-400 dark:text-[#4c4e51] tracking-wider">
                       {tx.createdByEmail}
                     </TableCell>
-                    <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-white' : 'text-gray-500 dark:text-[#8a8a8a]'}`}>
+                    <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
                       {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                     </TableCell>
                     <TableCell className="text-right">

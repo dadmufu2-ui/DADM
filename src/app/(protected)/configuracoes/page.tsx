@@ -41,13 +41,13 @@ export default function ConfiguracoesPage() {
       <div className="flex flex-wrap gap-4 border-b border-gray-200 dark:border-[#2a2c30]">
         <button 
           onClick={() => setActiveTab("usuarios")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "usuarios" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "usuarios" ? "border-gray-900 text-gray-900 dark:border-white dark:text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:hover:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2"><Users className="w-4 h-4" /> Usuários</div>
         </button>
         <button 
           onClick={() => setActiveTab("auditoria")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "auditoria" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "auditoria" ? "border-gray-900 text-gray-900 dark:border-white dark:text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:hover:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4" /> 
@@ -57,7 +57,7 @@ export default function ConfiguracoesPage() {
         </button>
         <button 
           onClick={() => setActiveTab("categorias")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "categorias" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "categorias" ? "border-gray-900 text-gray-900 dark:border-white dark:text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:hover:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2"><Tags className="w-4 h-4" /> Categorias</div>
         </button>
