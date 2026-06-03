@@ -363,7 +363,7 @@ export default function MCPPage() {
                           </td>
                           
                           {Object.keys(selectedBatch.supplierMeta || {}).map(suppId => {
-                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, icms: 0, icmsType: '%', ipi: 0, ipiType: '%', pisCofins: 0, pisCofinsType: '%' };
+                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, minQuantity: 0, icms: 0, icmsType: '%', ipi: 0, ipiType: '%', pisCofins: 0, pisCofinsType: '%' };
                             const isWinner = winners[itemId]?.supplierId === suppId;
                             const handleUpdate = (field: string, val: string | number) => {
                               saveQuote(selectedBatch.id, itemId, suppId, { ...quote, [field]: val });
@@ -373,9 +373,13 @@ export default function MCPPage() {
                               <td key={suppId} className={`p-2 border border-gray-300 dark:border-[#2a2c30] align-top ${isWinner ? 'bg-emerald-50 dark:bg-emerald-900/10 shadow-[inset_0_0_0_2px_#10b981]' : ''}`}>
                                 {isWinner && <div className="text-[10px] text-emerald-600 font-bold uppercase text-center mb-1 flex items-center justify-center gap-1"><CheckCircle2 className="w-3 h-3"/> Vencedor</div>}
                                 <div className="grid grid-cols-2 gap-1 text-[10px] mb-2">
-                                  <div className="flex flex-col col-span-2">
+                                  <div className="flex flex-col">
                                     <span className="text-gray-500">Base Unit. (R$)</span>
                                     <input type="number" step="0.01" value={quote.basePrice || ''} onChange={e => handleUpdate('basePrice', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-white dark:bg-zinc-800" />
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className="text-gray-500">Qtd Mínima</span>
+                                    <input type="number" value={quote.minQuantity || ''} onChange={e => handleUpdate('minQuantity', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-white dark:bg-zinc-800" />
                                   </div>
                                   <div className="flex flex-col">
                                     <div className="flex items-center justify-between">

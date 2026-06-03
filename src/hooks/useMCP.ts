@@ -9,6 +9,7 @@ export interface SupplierMeta {
 
 export interface ItemQuote {
   basePrice: number;
+  minQuantity?: number; // Quantidade mínima exigida pelo fornecedor para este item
   icms?: number;
   icmsType?: '%' | 'R$';
   ipi?: number;
