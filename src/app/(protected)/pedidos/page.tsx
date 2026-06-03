@@ -18,6 +18,7 @@ export default function PedidosPage() {
   const [data, setData] = useState<any[]>([]);
   const [expandedCards, setExpandedCards] = useState<string[]>([]);
   const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
+  const [isProcessed, setIsProcessed] = useState(false);
   
   // State for supplier orders
   const [supplierInputs, setSupplierInputs] = useState<Record<string, { quantity: number, cost: number, expenses: number }>>({});
@@ -35,6 +36,7 @@ export default function PedidosPage() {
         const ws = wb.Sheets[wsname];
         const jsonData = XLSX.utils.sheet_to_json(ws);
         setData(jsonData);
+        setIsProcessed(false);
       } catch (error) {
         alert("Erro ao ler o arquivo. Certifique-se de que é um Excel ou CSV válido.");
       }
@@ -163,8 +165,7 @@ export default function PedidosPage() {
         alert("Lote processado. Nenhuma sobra para ser enviada ao estoque.");
       }
 
-      // Limpar a tela para o próximo uso
-      setData([]);
+      setIsProcessed(true);
     }, 500);
   };
 
@@ -178,7 +179,7 @@ export default function PedidosPage() {
           <p className="text-gray-500 dark:text-zinc-400 mt-1">Carregue a planilha de vendas e gere relatórios automáticos.</p>
         </div>
 
-        {data.length > 0 && (role === "tesoureiro" || role === "coordenador") && (
+        {data.length > 0 && !isProcessed && (role === "tesoureiro" || role === "coordenador") && (
           <button onClick={openProcessModal} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm shadow-lg">
             <PackagePlus className="w-4 h-4" /> Processar Lote
           </button>
@@ -320,7 +321,7 @@ export default function PedidosPage() {
           </div>
 
           <div className="flex justify-end mt-4 no-print">
-             <button onClick={() => setData([])} className="text-sm text-red-500 hover:text-red-600 font-medium p-2">Limpar Planilha</button>
+             <button onClick={() => { setData([]); setIsProcessed(false); }} className="text-sm text-red-500 hover:text-red-600 font-medium p-2">Limpar Planilha</button>
           </div>
         </>
       )}
