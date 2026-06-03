@@ -117,48 +117,55 @@ export default function PedidosPage() {
   const handleConfirmProcess = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Imprimir (gera o PDF)
-    window.print();
-
-    // Calcular sobras para o estoque
-    const newStockItems: any[] = [];
-    Object.entries(supplierInputs).forEach(([prodName, inputs]) => {
-      const demandedQty = productsDemanded.find(p => p.name === prodName)?.value || 0;
-      const difference = inputs.quantity - demandedQty;
-      
-      if (difference > 0) {
-        newStockItems.push({
-          name: prodName,
-          quantity: difference,
-          baseCost: inputs.cost,
-          additionalExpenses: inputs.expenses,
-          // Como o preço de venda varia no cheers, deixamos 0 para editarem depois ou o custo+margem
-          salePrice: inputs.cost * 1.5, 
-          category: "Sobra de Pedidos Cheers",
-          createdAtIso: new Date().toISOString(),
-          timestamp: Date.now(),
-          createdByEmail: user?.email || "unknown@system"
-        });
-      }
-    });
-
-    if (newStockItems.length > 0) {
-      if (role === "tesoureiro") {
-        for (const item of newStockItems) {
-          await addItem(item);
-        }
-        alert("Lote processado. Sobras adicionadas ao estoque com sucesso!");
-      } else if (role === "coordenador") {
-        await createBatchRequest(newStockItems, user?.email || "unknown");
-        alert("Lote processado. As sobras foram enviadas para aprovação do Tesoureiro.");
-      }
-    } else {
-      alert("Lote processado. Nenhuma sobra para ser enviada ao estoque.");
-    }
-
-    // Limpar
+    // 1. Expandir todos os cards para garantir que os dados detalhados apareçam na impressão
+    setExpandedCards(Object.keys(groupedByBuyer));
+    
+    // 2. Fechar o modal imediatamente para ele não sobrepor ou bugar a impressão
     setIsProcessModalOpen(false);
-    setData([]);
+
+    // 3. Aguardar a renderização do React (fechar modal e abrir cards)
+    setTimeout(async () => {
+      // 4. Chama a impressão limpa
+      window.print();
+
+      // Calcular sobras para o estoque
+      const newStockItems: any[] = [];
+      Object.entries(supplierInputs).forEach(([prodName, inputs]) => {
+        const demandedQty = productsDemanded.find(p => p.name === prodName)?.value || 0;
+        const difference = inputs.quantity - demandedQty;
+        
+        if (difference > 0) {
+          newStockItems.push({
+            name: prodName,
+            quantity: difference,
+            baseCost: inputs.cost,
+            additionalExpenses: inputs.expenses,
+            salePrice: inputs.cost * 1.5, 
+            category: "Sobra de Pedidos Cheers",
+            createdAtIso: new Date().toISOString(),
+            timestamp: Date.now(),
+            createdByEmail: user?.email || "unknown@system"
+          });
+        }
+      });
+
+      if (newStockItems.length > 0) {
+        if (role === "tesoureiro") {
+          for (const item of newStockItems) {
+            await addItem(item);
+          }
+          alert("Lote processado. Sobras adicionadas ao estoque com sucesso!");
+        } else if (role === "coordenador") {
+          await createBatchRequest(newStockItems, user?.email || "unknown");
+          alert("Lote processado. As sobras foram enviadas para aprovação do Tesoureiro.");
+        }
+      } else {
+        alert("Lote processado. Nenhuma sobra para ser enviada ao estoque.");
+      }
+
+      // Limpar a tela para o próximo uso
+      setData([]);
+    }, 500);
   };
 
   return (
