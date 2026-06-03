@@ -289,6 +289,7 @@ export default function EstoquePage() {
 
       {/* ÁREA DE IMPRESSÃO (INVENTÁRIO PDF) */}
       <div className="hidden print-only print:block text-black p-8 font-sans">
+        <style dangerouslySetInnerHTML={{ __html: "@page { size: landscape; margin: 10mm; }" }} />
         <div className="border-b-2 border-black pb-4 mb-8">
           <h1 className="text-3xl font-bold uppercase tracking-widest text-black">Relatório de Inventário</h1>
           <p className="text-gray-600 mt-2 text-sm">Diretório Acadêmico DADM</p>
@@ -335,7 +336,7 @@ export default function EstoquePage() {
                 <td className="border p-2 text-right">{formatCurrency(item.salePrice)}</td>
                 <td className="border p-2 text-right text-green-700 font-medium">{formatCurrency(item.expectedProfit)}</td>
                 <td className="border p-2 text-[10px] font-mono">
-                  {item.createdByEmail.split('@')[0]}<br/>
+                  {item.createdByEmail?.split('@')[0] || "Sistema"}<br/>
                   <span className="text-gray-400">{item.id}</span>
                 </td>
               </tr>

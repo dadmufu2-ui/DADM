@@ -303,8 +303,9 @@ export default function CaixaPage() {
         </div>
       </div>
 
-      {/* ÁREA DE IMPRESSÃO (PDF/DRE) - Escondida da tela normal */}
+      {/* ÁREA DE IMPRESSÃO (DRE PDF) */}
       <div className="hidden print-only print:block text-black p-8 font-sans">
+        <style dangerouslySetInnerHTML={{ __html: "@page { size: landscape; margin: 10mm; }" }} />
         <div className="border-b-2 border-black pb-4 mb-8">
           <h1 className="text-3xl font-bold uppercase tracking-widest text-black">Relatório DRE Consolidado</h1>
           <p className="text-gray-600 mt-2 text-sm">Diretório Acadêmico DADM</p>
@@ -354,7 +355,7 @@ export default function CaixaPage() {
                 <td className="border p-2">{tx.category}</td>
                 <td className="border p-2">{tx.type === 'income' ? 'ENTRADA' : 'SAÍDA'}</td>
                 <td className="border p-2 text-right">{formatCurrency(tx.amount)}</td>
-                <td className="border p-2">{tx.createdByEmail.split('@')[0]}</td>
+                <td className="border p-2">{tx.createdByEmail?.split('@')[0] || "Sistema"}</td>
                 <td className="border p-2 text-[8px] text-gray-400 font-mono">{tx.id}</td>
               </tr>
             ))}
