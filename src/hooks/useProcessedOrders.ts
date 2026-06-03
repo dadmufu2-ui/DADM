@@ -25,10 +25,14 @@ export function useProcessedOrders() {
     const unsubscribe = onValue(ordersRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const parsedData = Object.keys(data).map(key => ({
-          ...data[key],
-          id: key
-        })) as ProcessedOrder[];
+        const parsedData = Object.keys(data).map(key => {
+          const item = data[key];
+          return {
+            ...item,
+            id: key,
+            buyers: typeof item.buyers === 'string' ? JSON.parse(item.buyers) : item.buyers
+          };
+        }) as ProcessedOrder[];
         // Sort by timestamp (oldest first or newest first? newest first for display)
         setOrders(parsedData.sort((a, b) => b.timestamp - a.timestamp));
       } else {
@@ -52,7 +56,11 @@ export function useProcessedOrders() {
     try {
       const ordersRef = ref(database, 'processed_orders');
       const newOrderRef = push(ordersRef);
-      await set(newOrderRef, orderData);
+      const payload = {
+        ...orderData,
+        buyers: JSON.stringify(orderData.buyers)
+      };
+      await set(newOrderRef, payload);
     } catch (error: any) {
       console.error("Erro ao adicionar lote processado:", error);
       throw error;

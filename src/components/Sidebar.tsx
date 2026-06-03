@@ -28,13 +28,13 @@ export function Sidebar() {
 
   return (
     <aside className="fixed bottom-0 md:top-4 md:left-4 w-full md:w-[80px] h-16 md:h-[calc(100vh-2rem)] bg-white dark:bg-[#151618] text-gray-500 dark:text-[#8a8a8a] flex flex-row md:flex-col items-center justify-around md:justify-between z-50 border-t md:border border-gray-200 dark:border-[#1e1f22] md:rounded-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.5)] md:shadow-2xl print:hidden">
-      <div className="hidden md:flex h-32 items-center justify-center w-full relative">
+      <div className="hidden md:flex h-20 items-center justify-center w-full relative mt-4">
         <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#1e2023] flex items-center justify-center text-gray-900 dark:text-white overflow-hidden border border-gray-300 dark:border-[#2a2c30] hover:border-gray-400 dark:hover:border-white transition-colors cursor-pointer group">
           <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
         </div>
       </div>
       
-      <nav className="flex flex-row md:flex-col md:gap-8 w-full items-center justify-around md:justify-center h-full">
+      <nav className="flex flex-row md:flex-col md:gap-5 w-full items-center justify-around md:justify-center h-full flex-1">
         {routes.map((route) => {
           const isActive = pathname === route.path || (route.path === '/caixa' && pathname.includes('caixa')) || (route.path === '/estoque' && pathname.includes('estoque'));
           return (
