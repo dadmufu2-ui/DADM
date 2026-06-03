@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart, FolderOpen } from "lucide-react";
+import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart, FolderOpen, Map } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -23,6 +23,7 @@ export function Sidebar() {
   } else {
     routes = [
       { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
+      { name: "MCP (COTAÇÕES)", path: "/mcp", icon: Map },
       { name: "PROJETOS", path: "/projetos", icon: FolderOpen },
       { name: "PEDIDOS", path: "/pedidos", icon: ShoppingCart },
       { name: "HISTÓRICO", path: "/historico-pedidos", icon: Receipt },
