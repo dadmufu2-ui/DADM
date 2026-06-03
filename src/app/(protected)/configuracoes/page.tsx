@@ -19,8 +19,8 @@ export default function ConfiguracoesPage() {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
         <ShieldAlert className="w-16 h-16 text-red-500" />
-        <h1 className="text-2xl font-bold text-white">Acesso Negado</h1>
-        <p className="text-[#8a8a8a]">Apenas o Tesoureiro Mestre possui acesso ao painel de configurações.</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Acesso Negado</h1>
+        <p className="text-gray-500 dark:text-[#8a8a8a]">Apenas o Tesoureiro Mestre possui acesso ao painel de configurações.</p>
       </div>
     );
   }
@@ -31,23 +31,23 @@ export default function ConfiguracoesPage() {
   return (
     <div className="space-y-8 pb-10">
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
           <Settings className="w-6 h-6" /> Configurações Gerais
         </h1>
-        <p className="text-[#8a8a8a] mt-1">Gerencie usuários, permissões, auditoria e categorias do sistema.</p>
+        <p className="text-gray-500 dark:text-[#8a8a8a] mt-1">Gerencie usuários, permissões, auditoria e categorias do sistema.</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-[#2a2c30]">
+      <div className="flex flex-wrap gap-4 border-b border-gray-200 dark:border-[#2a2c30]">
         <button 
           onClick={() => setActiveTab("usuarios")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "usuarios" ? "border-white text-white" : "border-transparent text-[#4c4e51] hover:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "usuarios" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2"><Users className="w-4 h-4" /> Usuários</div>
         </button>
         <button 
           onClick={() => setActiveTab("auditoria")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "auditoria" ? "border-white text-white" : "border-transparent text-[#4c4e51] hover:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "auditoria" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4" /> 
@@ -57,7 +57,7 @@ export default function ConfiguracoesPage() {
         </button>
         <button 
           onClick={() => setActiveTab("categorias")}
-          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "categorias" ? "border-white text-white" : "border-transparent text-[#4c4e51] hover:text-[#8a8a8a]"}`}
+          className={`pb-3 text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === "categorias" ? "border-white text-white" : "border-transparent text-gray-400 dark:text-[#4c4e51] hover:text-gray-500 dark:text-[#8a8a8a]"}`}
         >
           <div className="flex items-center gap-2"><Tags className="w-4 h-4" /> Categorias</div>
         </button>
@@ -68,19 +68,19 @@ export default function ConfiguracoesPage() {
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
           
           {/* Pendentes */}
-          <div className="bg-[#1e2023] border border-[#2a2c30] rounded-lg overflow-hidden">
-            <div className="bg-[#2a2c30]/50 p-4 border-b border-[#2a2c30] flex justify-between items-center">
+          <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-[#2a2c30]/50 p-4 border-b border-gray-200 dark:border-[#2a2c30] flex justify-between items-center">
               <div>
-                <h3 className="text-white font-medium">Fila de Aprovação ({pendingUsers.length})</h3>
-                <p className="text-[11px] text-[#8a8a8a]">Usuários que tentaram acessar o sistema e aguardam liberação.</p>
+                <h3 className="text-gray-900 dark:text-white font-medium">Fila de Aprovação ({pendingUsers.length})</h3>
+                <p className="text-[11px] text-gray-500 dark:text-[#8a8a8a]">Usuários que tentaram acessar o sistema e aguardam liberação.</p>
               </div>
             </div>
-            <div className="p-0">
+            <div className="p-0 overflow-x-auto w-full">
               {pendingUsers.length === 0 ? (
-                <div className="p-8 text-center text-[#4c4e51] text-sm">Nenhuma solicitação pendente.</div>
+                <div className="p-8 text-center text-gray-400 dark:text-[#4c4e51] text-sm">Nenhuma solicitação pendente.</div>
               ) : (
                 <table className="w-full text-sm text-left">
-                  <thead className="text-[10px] uppercase text-[#8a8a8a] bg-[#121315]">
+                  <thead className="text-[10px] uppercase text-gray-500 dark:text-[#8a8a8a] bg-gray-50 dark:bg-[#121315]">
                     <tr>
                       <th className="px-6 py-3">Email</th>
                       <th className="px-6 py-3 text-right">Ação</th>
@@ -88,8 +88,8 @@ export default function ConfiguracoesPage() {
                   </thead>
                   <tbody>
                     {pendingUsers.map(user => (
-                      <tr key={user.id} className="border-b border-[#2a2c30]">
-                        <td className="px-6 py-4 text-white">{user.email}</td>
+                      <tr key={user.id} className="border-b border-gray-200 dark:border-[#2a2c30]">
+                        <td className="px-6 py-4 text-gray-900 dark:text-white">{user.email}</td>
                         <td className="px-6 py-4 flex gap-2 justify-end">
                           <button onClick={() => changeUserRole(user.id, user.email, "usuario")} className="flex items-center gap-1 bg-green-600/20 text-green-500 hover:bg-green-600/40 px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
                             <Check className="w-3 h-3" /> Aprovar Acesso
@@ -107,14 +107,14 @@ export default function ConfiguracoesPage() {
           </div>
 
           {/* Ativos */}
-          <div className="bg-[#1e2023] border border-[#2a2c30] rounded-lg overflow-hidden">
-            <div className="bg-[#2a2c30]/50 p-4 border-b border-[#2a2c30]">
-              <h3 className="text-white font-medium">Usuários Ativos ({activeUsers.length})</h3>
-              <p className="text-[11px] text-[#8a8a8a]">Gerencie o nível de acesso da equipe.</p>
+          <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-[#2a2c30]/50 p-4 border-b border-gray-200 dark:border-[#2a2c30]">
+              <h3 className="text-gray-900 dark:text-white font-medium">Usuários Ativos ({activeUsers.length})</h3>
+              <p className="text-[11px] text-gray-500 dark:text-[#8a8a8a]">Gerencie o nível de acesso da equipe.</p>
             </div>
-            <div className="p-0">
-              <table className="w-full text-sm text-left">
-                <thead className="text-[10px] uppercase text-[#8a8a8a] bg-[#121315]">
+            <div className="p-0 overflow-x-auto w-full">
+              <table className="w-full text-sm text-left min-w-[600px]">
+                <thead className="text-[10px] uppercase text-gray-500 dark:text-[#8a8a8a] bg-gray-50 dark:bg-[#121315]">
                   <tr>
                     <th className="px-6 py-3">Email</th>
                     <th className="px-6 py-3">Cargo Atual</th>
@@ -123,8 +123,8 @@ export default function ConfiguracoesPage() {
                 </thead>
                 <tbody>
                   {activeUsers.map(user => (
-                    <tr key={user.id} className="border-b border-[#2a2c30]">
-                      <td className="px-6 py-4 text-white">{user.email}</td>
+                    <tr key={user.id} className="border-b border-gray-200 dark:border-[#2a2c30]">
+                      <td className="px-6 py-4 text-gray-900 dark:text-white">{user.email}</td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
                           user.role === 'tesoureiro' ? 'bg-amber-500/20 text-amber-500' :
@@ -138,13 +138,13 @@ export default function ConfiguracoesPage() {
                         <select 
                           value={user.role || ""} 
                           onChange={(e) => changeUserRole(user.id, user.email, e.target.value as UserRole)}
-                          className="bg-[#121315] border border-[#4c4e51] text-white text-xs rounded px-2 py-1 outline-none focus:border-indigo-500"
+                          className="bg-gray-50 dark:bg-[#121315] border border-[#4c4e51] text-white text-xs rounded px-2 py-1 outline-none focus:border-indigo-500"
                         >
                           <option value="usuario">Usuário Comum</option>
                           <option value="coordenador">Coordenador</option>
                           <option value="tesoureiro">Tesoureiro</option>
                         </select>
-                        <button onClick={() => { if(confirm("Revogar acesso deste usuário?")) deleteUserRecord(user.id); }} className="text-[#4c4e51] hover:text-red-500 transition-colors" title="Revogar Acesso">
+                        <button onClick={() => { if(confirm("Revogar acesso deste usuário?")) deleteUserRecord(user.id); }} className="text-gray-400 dark:text-[#4c4e51] hover:text-red-500 transition-colors" title="Revogar Acesso">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
@@ -160,22 +160,22 @@ export default function ConfiguracoesPage() {
       {/* Tab Content: Auditoria */}
       {activeTab === "auditoria" && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="bg-[#1e2023] border border-[#2a2c30] rounded-lg overflow-hidden">
-            <div className="bg-[#2a2c30]/50 p-4 border-b border-[#2a2c30] flex justify-between items-center">
+          <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-[#2a2c30]/50 p-4 border-b border-gray-200 dark:border-[#2a2c30] flex justify-between items-center">
               <div>
-                <h3 className="text-white font-medium">Pedidos de Exclusão</h3>
-                <p className="text-[11px] text-[#8a8a8a]">Coordenadores não podem excluir dados diretamente. Eles enviam para esta fila.</p>
+                <h3 className="text-gray-900 dark:text-white font-medium">Pedidos de Exclusão</h3>
+                <p className="text-[11px] text-gray-500 dark:text-[#8a8a8a]">Coordenadores não podem excluir dados diretamente. Eles enviam para esta fila.</p>
               </div>
             </div>
-            <div className="p-0">
+            <div className="p-0 overflow-x-auto w-full">
               {requests.length === 0 ? (
-                <div className="p-12 text-center text-[#4c4e51] text-sm flex flex-col items-center">
+                <div className="p-12 text-center text-gray-400 dark:text-[#4c4e51] text-sm flex flex-col items-center">
                   <Shield className="w-12 h-12 mb-4 opacity-20" />
                   Nenhuma exclusão aguardando aprovação. O sistema está seguro.
                 </div>
               ) : (
                 <table className="w-full text-sm text-left">
-                  <thead className="text-[10px] uppercase text-[#8a8a8a] bg-[#121315]">
+                  <thead className="text-[10px] uppercase text-gray-500 dark:text-[#8a8a8a] bg-gray-50 dark:bg-[#121315]">
                     <tr>
                       <th className="px-6 py-3">Origem</th>
                       <th className="px-6 py-3">Item / Descrição</th>
@@ -185,19 +185,19 @@ export default function ConfiguracoesPage() {
                   </thead>
                   <tbody>
                     {requests.map(req => (
-                      <tr key={req.id} className="border-b border-[#2a2c30]">
+                      <tr key={req.id} className="border-b border-gray-200 dark:border-[#2a2c30]">
                         <td className="px-6 py-4">
                           <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${req.collection === 'caixa' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-blue-500/20 text-blue-500'}`}>
                             {req.collection}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-white font-medium">
+                        <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">
                           {req.itemNameOrDesc}
-                          <div className="text-[9px] text-[#4c4e51] font-mono mt-1">{req.itemId}</div>
+                          <div className="text-[9px] text-gray-400 dark:text-[#4c4e51] font-mono mt-1">{req.itemId}</div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-white text-xs">{req.requestedByEmail}</span>
-                          <div className="text-[10px] text-[#4c4e51] mt-0.5">{new Date(req.timestamp).toLocaleString('pt-BR')}</div>
+                          <span className="text-gray-900 dark:text-white text-xs">{req.requestedByEmail}</span>
+                          <div className="text-[10px] text-gray-400 dark:text-[#4c4e51] mt-0.5">{new Date(req.timestamp).toLocaleString('pt-BR')}</div>
                         </td>
                         <td className="px-6 py-4 flex gap-2 justify-end">
                           <button onClick={() => { if(confirm("Confirmar a exclusão definitiva deste item do banco de dados?")) approveRequest(req); }} className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
@@ -221,15 +221,15 @@ export default function ConfiguracoesPage() {
       {activeTab === "categorias" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {/* Caixa */}
-          <div className="bg-[#1e2023] border border-[#2a2c30] rounded-lg overflow-hidden">
-            <div className="bg-[#2a2c30]/50 p-4 border-b border-[#2a2c30]">
-              <h3 className="text-white font-medium text-emerald-400">Categorias de Caixa</h3>
+          <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-[#2a2c30]/50 p-4 border-b border-gray-200 dark:border-[#2a2c30]">
+              <h3 className="text-gray-900 dark:text-white font-medium text-emerald-400">Categorias de Caixa</h3>
             </div>
             <div className="p-4 space-y-2">
               {cxCategories.map(cat => (
-                <div key={cat} className="flex justify-between items-center bg-[#121315] border border-[#2a2c30] px-3 py-2 rounded">
-                  <span className="text-sm text-white">{cat}</span>
-                  <button onClick={() => { if(confirm(`Excluir categoria '${cat}'?`)) deleteCxCat(cat); }} className="text-[#4c4e51] hover:text-red-500 transition-colors">
+                <div key={cat} className="flex justify-between items-center bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] px-3 py-2 rounded">
+                  <span className="text-sm text-gray-900 dark:text-white">{cat}</span>
+                  <button onClick={() => { if(confirm(`Excluir categoria '${cat}'?`)) deleteCxCat(cat); }} className="text-gray-400 dark:text-[#4c4e51] hover:text-red-500 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -243,15 +243,15 @@ export default function ConfiguracoesPage() {
           </div>
 
           {/* Estoque */}
-          <div className="bg-[#1e2023] border border-[#2a2c30] rounded-lg overflow-hidden">
-            <div className="bg-[#2a2c30]/50 p-4 border-b border-[#2a2c30]">
-              <h3 className="text-white font-medium text-blue-400">Categorias de Estoque</h3>
+          <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-[#2a2c30]/50 p-4 border-b border-gray-200 dark:border-[#2a2c30]">
+              <h3 className="text-gray-900 dark:text-white font-medium text-blue-400">Categorias de Estoque</h3>
             </div>
             <div className="p-4 space-y-2">
               {estCategories.map(cat => (
-                <div key={cat} className="flex justify-between items-center bg-[#121315] border border-[#2a2c30] px-3 py-2 rounded">
-                  <span className="text-sm text-white">{cat}</span>
-                  <button onClick={() => { if(confirm(`Excluir categoria '${cat}'?`)) deleteEstCat(cat); }} className="text-[#4c4e51] hover:text-red-500 transition-colors">
+                <div key={cat} className="flex justify-between items-center bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] px-3 py-2 rounded">
+                  <span className="text-sm text-gray-900 dark:text-white">{cat}</span>
+                  <button onClick={() => { if(confirm(`Excluir categoria '${cat}'?`)) deleteEstCat(cat); }} className="text-gray-400 dark:text-[#4c4e51] hover:text-red-500 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -268,3 +268,5 @@ export default function ConfiguracoesPage() {
     </div>
   );
 }
+
+

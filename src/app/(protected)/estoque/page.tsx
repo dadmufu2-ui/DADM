@@ -111,7 +111,7 @@ export default function EstoquePage() {
       <div className="space-y-6 no-print">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Estoque</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-900 dark:text-white">Controle de Estoque</h1>
             <p className="text-gray-500 dark:text-zinc-400 mt-1">Gerencie produtos e calcule lucro real dinamicamente.</p>
           </div>
           
@@ -127,24 +127,24 @@ export default function EstoquePage() {
                 <DialogTrigger className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Plus className="w-4 h-4" /> Adicionar Lote
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[500px] bg-[#1e2023] border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[500px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
                   <DialogHeader>
                     <DialogTitle className="text-white font-medium">Novo Lote de Produtos</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleAdd} className="space-y-4 mt-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Nome do Produto</Label>
-                      <Input id="name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Ex: Moletom DADM G" className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Label htmlFor="name" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Nome do Produto</Label>
+                      <Input id="name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Ex: Moletom DADM G" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="category" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Categoria</Label>
+                      <Label htmlFor="category" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Categoria</Label>
                       <select 
                         id="category" 
                         required 
                         value={formData.category} 
                         onChange={handleCategoryChange} 
-                        className="w-full h-10 px-3 bg-[#121315] border border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
+                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
                       >
                         <option value="" disabled>Selecione uma categoria...</option>
                         {categories.map(cat => (
@@ -156,35 +156,35 @@ export default function EstoquePage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="quantity" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Quantidade</Label>
-                        <Input id="quantity" type="number" min="1" required value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Label htmlFor="quantity" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Quantidade</Label>
+                        <Input id="quantity" type="number" min="1" required value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="salePrice" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Preço de Venda (Unidade)</Label>
-                        <Input id="salePrice" type="number" step="0.01" min="0" required value={formData.salePrice} onChange={e => setFormData({...formData, salePrice: Number(e.target.value)})} className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Label htmlFor="salePrice" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Preço de Venda (Unidade)</Label>
+                        <Input id="salePrice" type="number" step="0.01" min="0" required value={formData.salePrice} onChange={e => setFormData({...formData, salePrice: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="baseCost" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Custo Unitário (R$)</Label>
-                        <Input id="baseCost" type="number" step="0.01" min="0" required value={formData.baseCost} onChange={e => setFormData({...formData, baseCost: Number(e.target.value)})} className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Label htmlFor="baseCost" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Custo Unitário (R$)</Label>
+                        <Input id="baseCost" type="number" step="0.01" min="0" required value={formData.baseCost} onChange={e => setFormData({...formData, baseCost: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="additionalExpenses" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Despesas Extras Lote (Frete)</Label>
-                        <Input id="additionalExpenses" type="number" step="0.01" min="0" required value={formData.additionalExpenses} onChange={e => setFormData({...formData, additionalExpenses: Number(e.target.value)})} className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Label htmlFor="additionalExpenses" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Despesas Extras Lote (Frete)</Label>
+                        <Input id="additionalExpenses" type="number" step="0.01" min="0" required value={formData.additionalExpenses} onChange={e => setFormData({...formData, additionalExpenses: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                     </div>
 
-                    <div className="bg-[#121315] border border-[#2a2c30] p-4 rounded-lg mt-4 flex justify-between items-center">
+                    <div className="bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] p-4 rounded-lg mt-4 flex justify-between items-center">
                       <div>
-                        <p className="text-[10px] font-bold text-[#4c4e51] uppercase tracking-wider">Projeção do Lote</p>
-                        <p className="text-xs text-[#8a8a8a] mt-1">
+                        <p className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Projeção do Lote</p>
+                        <p className="text-xs text-gray-500 dark:text-[#8a8a8a] mt-1">
                           Custo Real Un: {formatCurrency(Number(formData.baseCost) + (Number(formData.additionalExpenses) / (Number(formData.quantity) || 1)))}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[10px] font-bold text-[#4c4e51] uppercase tracking-wider">Lucro Líquido</p>
+                        <p className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Lucro Líquido</p>
                         <p className="text-sm font-bold text-emerald-400">
                           {formatCurrency((Number(formData.salePrice) - (Number(formData.baseCost) + (Number(formData.additionalExpenses) / (Number(formData.quantity) || 1)))) * Number(formData.quantity))}
                         </p>
@@ -203,69 +203,69 @@ export default function EstoquePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 pt-8 border-t border-[#1e2023]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 pt-8 border-t border-gray-200 dark:border-[#1e2023]">
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Total em Estoque (Custo)</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Total em Estoque (Custo)</h3>
             <div>
-              <p className="text-[22px] font-normal text-white">{formatCurrency(totalCost)}</p>
+              <p className="text-[22px] font-normal text-gray-900 dark:text-white">{formatCurrency(totalCost)}</p>
             </div>
           </div>
           
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Valor Final de Venda</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Valor Final de Venda</h3>
             <div>
-              <p className="text-[22px] font-normal text-white">{formatCurrency(expectedRevenue)}</p>
+              <p className="text-[22px] font-normal text-gray-900 dark:text-white">{formatCurrency(expectedRevenue)}</p>
             </div>
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Potencial de Lucro</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Potencial de Lucro</h3>
             <div>
-              <p className="text-[22px] font-normal text-[#8a8a8a]">{formatCurrency(potentialProfit)}</p>
+              <p className="text-[22px] font-normal text-gray-500 dark:text-[#8a8a8a]">{formatCurrency(potentialProfit)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-transparent border-t border-[#1e2023] pt-8 mt-8">
-          <Table>
-            <TableHeader className="border-b border-[#1e2023]">
+        <div className="bg-transparent border-t border-gray-200 dark:border-[#1e2023] pt-8 mt-8 overflow-x-auto w-full">
+          <Table className="w-full min-w-[900px]">
+            <TableHeader className="border-b border-gray-200 dark:border-[#1e2023]">
               <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Data / ISO</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Produto</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-center">Qtd.</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Custo Real (Un)</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Preço Venda</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Lucro Unitário</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Lucro Líquido</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Ações</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Data / ISO</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Produto</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-center">Qtd.</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Custo Real (Un)</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Preço Venda</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Lucro Unitário</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Lucro Líquido</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {items.length === 0 ? (
                 <TableRow className="border-none hover:bg-transparent">
-                  <TableCell colSpan={8} className="text-center py-10 text-[#4c4e51]">
+                  <TableCell colSpan={8} className="text-center py-10 text-gray-400 dark:text-[#4c4e51]">
                     Nenhum item no estoque.
                   </TableCell>
                 </TableRow>
               ) : (
                 items.map((item) => (
-                  <TableRow key={item.id} className="border-b border-[#1e2023] hover:bg-[#1e2023]/30 transition-colors">
-                    <TableCell className="text-xs text-[#4c4e51]">
+                  <TableRow key={item.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-white dark:bg-[#1e2023]/30 transition-colors">
+                    <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
                       {new Date(item.entryDate).toLocaleDateString('pt-BR')}
                       <div className="text-[9px] opacity-50">{item.createdAtIso?.split('T')[0]}</div>
                     </TableCell>
                     <TableCell className="font-medium text-white">
                       {item.name}
-                      <div className="text-[10px] text-[#4c4e51] uppercase tracking-wider">{item.category}</div>
+                      <div className="text-[10px] text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">{item.category}</div>
                     </TableCell>
                     <TableCell className="text-center text-white">{item.quantity}</TableCell>
-                    <TableCell className="text-right text-[#8a8a8a] font-medium">
+                    <TableCell className="text-right text-gray-500 dark:text-[#8a8a8a] font-medium">
                       {formatCurrency(item.realCostUnit)}
                     </TableCell>
                     <TableCell className="text-right font-medium text-white">
                       {formatCurrency(item.salePrice)}
                     </TableCell>
-                    <TableCell className="text-right text-[#8a8a8a] font-medium">
+                    <TableCell className="text-right text-gray-500 dark:text-[#8a8a8a] font-medium">
                       {formatCurrency(item.salePrice - item.realCostUnit)}
                     </TableCell>
                     <TableCell className="text-right text-white font-medium">
@@ -290,7 +290,7 @@ export default function EstoquePage() {
                               }
                             }
                           }}
-                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-[#4c4e51] hover:text-red-500' : 'text-[#4c4e51] hover:text-amber-500'}`}
+                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
                           title={role === 'tesoureiro' ? "Excluir Lote" : "Solicitar Exclusão"}
                         >
                           {role === 'tesoureiro' ? <Trash2 className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
@@ -365,3 +365,5 @@ export default function EstoquePage() {
     </>
   );
 }
+
+

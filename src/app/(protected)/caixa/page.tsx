@@ -130,7 +130,7 @@ export default function CaixaPage() {
       <div className="space-y-6 no-print">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Caixa</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-900 dark:text-white">Controle de Caixa</h1>
             <p className="text-gray-500 dark:text-zinc-400 mt-1">Gerencie entradas e saídas financeiras do diretório.</p>
           </div>
           
@@ -140,18 +140,18 @@ export default function CaixaPage() {
                 <DialogTrigger className="flex items-center gap-2 bg-[#2a2c30] hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Printer className="w-4 h-4" /> Relatório DRE
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-[#1e2023] border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
                   <DialogHeader>
                     <DialogTitle className="text-white font-medium">Gerar Relatório (DRE)</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 mt-4">
                     <div className="space-y-2">
-                      <Label className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Inicial</Label>
-                      <Input type="date" value={reportStartDate} onChange={e => setReportStartDate(e.target.value)} className="bg-[#121315] border-[#2a2c30] text-white" />
+                      <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Inicial</Label>
+                      <Input type="date" value={reportStartDate} onChange={e => setReportStartDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white" />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Final</Label>
-                      <Input type="date" value={reportEndDate} onChange={e => setReportEndDate(e.target.value)} className="bg-[#121315] border-[#2a2c30] text-white" />
+                      <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Final</Label>
+                      <Input type="date" value={reportEndDate} onChange={e => setReportEndDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white" />
                     </div>
                     <button onClick={handlePrint} className="w-full bg-white text-black py-2 rounded-sm font-bold text-xs uppercase tracking-widest mt-4">
                       Gerar PDF
@@ -166,38 +166,38 @@ export default function CaixaPage() {
                 <DialogTrigger className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Plus className="w-4 h-4" /> Novo Lançamento
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-[#1e2023] border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
                   <DialogHeader>
                     <DialogTitle className="text-white font-medium">Lançamento Manual</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleAdd} className="space-y-4 mt-4">
                     <div className="space-y-2">
-                      <Label className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Tipo de Lançamento</Label>
+                      <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Tipo de Lançamento</Label>
                       <div className="flex gap-4">
                         <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name="type" value="income" checked={formData.type === 'income'} onChange={e => setFormData({...formData, type: e.target.value})} className="text-[#4c4e51] focus:ring-[#4c4e51] bg-[#121315] border-[#4c4e51]" />
+                          <input type="radio" name="type" value="income" checked={formData.type === 'income'} onChange={e => setFormData({...formData, type: e.target.value})} className="text-gray-400 dark:text-[#4c4e51] focus:ring-[#4c4e51] bg-gray-50 dark:bg-[#121315] border-[#4c4e51]" />
                           <span className="text-sm font-medium">Receita (Entrada)</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name="type" value="expense" checked={formData.type === 'expense'} onChange={e => setFormData({...formData, type: e.target.value})} className="text-[#4c4e51] focus:ring-[#4c4e51] bg-[#121315] border-[#4c4e51]" />
+                          <input type="radio" name="type" value="expense" checked={formData.type === 'expense'} onChange={e => setFormData({...formData, type: e.target.value})} className="text-gray-400 dark:text-[#4c4e51] focus:ring-[#4c4e51] bg-gray-50 dark:bg-[#121315] border-[#4c4e51]" />
                           <span className="text-sm font-medium">Despesa (Saída)</span>
                         </label>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="description" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Descrição</Label>
-                      <Input id="description" required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Mensalidades Setembro" className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Label htmlFor="description" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Descrição</Label>
+                      <Input id="description" required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Mensalidades Setembro" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="category" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Categoria</Label>
+                      <Label htmlFor="category" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Categoria</Label>
                       <select 
                         id="category" 
                         required 
                         value={formData.category} 
                         onChange={handleCategoryChange} 
-                        className="w-full h-10 px-3 bg-[#121315] border border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
+                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
                       >
                         <option value="" disabled>Selecione uma categoria...</option>
                         {categories.map(cat => (
@@ -208,8 +208,8 @@ export default function CaixaPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="amount" className="text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Valor (R$)</Label>
-                      <Input id="amount" type="number" step="0.01" min="0.01" required value={formData.amount} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="bg-[#121315] border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Label htmlFor="amount" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Valor (R$)</Label>
+                      <Input id="amount" type="number" step="0.01" min="0.01" required value={formData.amount} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
                     </div>
 
                     <div className="pt-4 flex justify-end">
@@ -224,66 +224,66 @@ export default function CaixaPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 pt-8 border-t border-[#1e2023]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 pt-8 border-t border-gray-200 dark:border-[#1e2023]">
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Saldo Atual</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Saldo Atual</h3>
             <div>
-              <p className="text-[22px] font-normal text-white">{formatCurrency(balance)}</p>
-              <p className="text-[10px] text-[#4c4e51] mt-1 tracking-wider">Consolidado no banco</p>
+              <p className="text-[22px] font-normal text-gray-900 dark:text-white">{formatCurrency(balance)}</p>
+              <p className="text-[10px] text-gray-400 dark:text-[#4c4e51] mt-1 tracking-wider">Consolidado no banco</p>
             </div>
           </div>
           
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Total Receitas</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Total Receitas</h3>
             <div>
-              <p className="text-[22px] font-normal text-white">{formatCurrency(totalIncome)}</p>
+              <p className="text-[22px] font-normal text-gray-900 dark:text-white">{formatCurrency(totalIncome)}</p>
             </div>
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-[11px] font-bold text-[#4c4e51] tracking-[0.2em] uppercase">Total Despesas</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-[#4c4e51] tracking-[0.2em] uppercase">Total Despesas</h3>
             <div>
-              <p className="text-[22px] font-normal text-[#8a8a8a]">{formatCurrency(totalExpense)}</p>
+              <p className="text-[22px] font-normal text-gray-500 dark:text-[#8a8a8a]">{formatCurrency(totalExpense)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-transparent border-t border-[#1e2023] pt-8 mt-8">
-          <Table>
-            <TableHeader className="border-b border-[#1e2023]">
+        <div className="bg-transparent border-t border-gray-200 dark:border-[#1e2023] pt-8 mt-8 overflow-x-auto w-full">
+          <Table className="w-full min-w-[800px]">
+            <TableHeader className="border-b border-gray-200 dark:border-[#1e2023]">
               <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Data / ISO</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Descrição</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Categoria</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Auditoria (Autor)</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Valor</TableHead>
-                <TableHead className="text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Ações</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Data / ISO</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Descrição</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Categoria</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase">Auditoria (Autor)</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Valor</TableHead>
+                <TableHead className="text-gray-400 dark:text-[#4c4e51] font-bold tracking-widest text-[10px] uppercase text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {transactions.length === 0 ? (
                 <TableRow className="border-none hover:bg-transparent">
-                  <TableCell colSpan={6} className="text-center py-10 text-[#4c4e51]">
+                  <TableCell colSpan={6} className="text-center py-10 text-gray-400 dark:text-[#4c4e51]">
                     Nenhum lançamento registrado.
                   </TableCell>
                 </TableRow>
               ) : (
                 transactions.map((tx) => (
-                  <TableRow key={tx.id} className="border-b border-[#1e2023] hover:bg-[#1e2023]/30 transition-colors">
-                    <TableCell className="text-xs text-[#4c4e51]">
+                  <TableRow key={tx.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-white dark:bg-[#1e2023]/30 transition-colors">
+                    <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
                       {formatDate(tx.timestamp)}
                       <div className="text-[9px] opacity-50">{tx.createdAtIso?.split('T')[0]}</div>
                     </TableCell>
                     <TableCell className="font-medium text-white">{tx.description}</TableCell>
                     <TableCell>
-                      <span className="text-[10px] font-bold text-[#8a8a8a] tracking-wider uppercase border border-[#2a2c30] bg-[#151618] px-2 py-1 rounded">
+                      <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-[#151618] px-2 py-1 rounded">
                         {tx.category}
                       </span>
                     </TableCell>
-                    <TableCell className="text-[10px] text-[#4c4e51] tracking-wider">
+                    <TableCell className="text-[10px] text-gray-400 dark:text-[#4c4e51] tracking-wider">
                       {tx.createdByEmail}
                     </TableCell>
-                    <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-white' : 'text-[#8a8a8a]'}`}>
+                    <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-white' : 'text-gray-500 dark:text-[#8a8a8a]'}`}>
                       {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                     </TableCell>
                     <TableCell className="text-right">
@@ -305,7 +305,7 @@ export default function CaixaPage() {
                               }
                             }
                           }}
-                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-[#4c4e51] hover:text-red-500' : 'text-[#4c4e51] hover:text-amber-500'}`}
+                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
                           title={role === 'tesoureiro' ? "Excluir Lançamento" : "Solicitar Exclusão"}
                         >
                           {role === 'tesoureiro' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
@@ -386,3 +386,5 @@ export default function CaixaPage() {
     </>
   );
 }
+
+

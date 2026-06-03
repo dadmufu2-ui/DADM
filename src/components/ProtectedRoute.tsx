@@ -17,6 +17,8 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     if (!loading) {
       if (!user && pathname !== "/login") {
         router.push("/login");
+      } else if (user && role === "usuario" && pathname !== "/reembolsos") {
+        router.push("/reembolsos");
       } else if (user && allowedRoles && !allowedRoles.includes(role)) {
         router.push("/dashboard");
       }
@@ -24,16 +26,22 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   }, [user, role, loading, router, pathname, allowedRoles]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-white bg-[#121315]">Carregando sistema...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-gray-900 dark:text-white bg-gray-50 dark:bg-[#121315]">Carregando sistema...</div>;
   }
 
   if (!user && pathname !== "/login") {
-    return null; // Will redirect in useEffect
+    return null; 
+  }
+
+  if (user && role === "usuario" && pathname !== "/reembolsos") {
+    return null; 
   }
 
   if (user && allowedRoles && !allowedRoles.includes(role)) {
-    return null; // Will redirect in useEffect
+    return null; 
   }
 
   return <>{children}</>;
 }
+
+

@@ -24,18 +24,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#121315] px-4 font-sans">
-      <div className="w-full max-w-md bg-[#1e2023] rounded-sm border border-[#2a2c30] p-12 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#121315] px-4 font-sans">
+      <div className="w-full max-w-md bg-white dark:bg-[#1e2023] rounded-sm border border-gray-200 dark:border-[#2a2c30] p-12 shadow-2xl relative overflow-hidden">
         
         {/* Subtle grid background */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2a2c30_1px,transparent_1px),linear-gradient(to_bottom,#2a2c30_1px,transparent_1px)] bg-[size:20px_20px] opacity-10 pointer-events-none"></div>
 
         <div className="text-center mb-10 relative z-10 flex flex-col items-center">
-          <div className="w-12 h-12 bg-[#121315] border border-[#4c4e51] flex items-center justify-center rounded-full mb-6">
-            <Shield className="w-5 h-5 text-white" />
+          <div className="w-12 h-12 bg-gray-50 dark:bg-[#121315] border border-gray-300 dark:border-[#4c4e51] flex items-center justify-center rounded-full mb-6">
+            <Shield className="w-5 h-5 text-gray-900 dark:text-white" />
           </div>
-          <h1 className="text-[20px] font-medium text-white tracking-widest uppercase">Controle DADM</h1>
-          <p className="text-[#8a8a8a] text-[11px] tracking-[0.2em] uppercase mt-3">Acesso Restrito</p>
+          <h1 className="text-[20px] font-medium text-gray-900 dark:text-white tracking-widest uppercase">Controle DADM</h1>
+          <p className="text-gray-500 dark:text-[#8a8a8a] text-[11px] tracking-[0.2em] uppercase mt-3">Acesso Restrito</p>
         </div>
 
         {error && (
@@ -70,3 +70,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+

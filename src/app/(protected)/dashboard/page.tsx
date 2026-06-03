@@ -59,26 +59,26 @@ export default function DashboardPage() {
   return (
     <div className="space-y-16 px-4 pb-12">
       {/* First Row of Charts */}
-      <div className="space-y-8 bg-[#151618] p-8 rounded-xl border border-[#1e1f22] shadow-2xl relative overflow-hidden">
+      <div className="space-y-8 bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] shadow-2xl relative overflow-hidden">
         {/* Subtle background grid pattern for aesthetics */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e1f22_1px,transparent_1px),linear-gradient(to_bottom,#1e1f22_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 pointer-events-none"></div>
         
         <div className="flex items-center justify-between relative z-10">
-          <h3 className="text-[11px] font-bold text-[#8a8a8a] tracking-[0.2em] uppercase">Balanço Anual {currentYear} (Entradas vs Gastos)</h3>
+          <h3 className="text-[11px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase">Balanço Anual {currentYear} (Entradas vs Gastos)</h3>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-white"></span>
-              <span className="text-[9px] text-[#8a8a8a] font-bold uppercase tracking-widest">Entradas</span>
+              <span className="text-[9px] text-gray-500 dark:text-[#8a8a8a] font-bold uppercase tracking-widest">Entradas</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#ff4444]"></span>
-              <span className="text-[9px] text-[#8a8a8a] font-bold uppercase tracking-widest">Gastos</span>
+              <span className="text-[9px] text-gray-500 dark:text-[#8a8a8a] font-bold uppercase tracking-widest">Gastos</span>
             </div>
           </div>
         </div>
         
         {/* Dynamic Grouped Bar Chart */}
-        <div className="h-56 w-full flex items-end justify-between border-b border-[#2a2c30] pb-2 relative z-10 mt-6">
+        <div className="h-56 w-full flex items-end justify-between border-b border-gray-200 dark:border-[#2a2c30] pb-2 relative z-10 mt-6">
           {annualData.map((data, i) => (
             <div key={i} className="flex gap-1 h-full items-end group relative w-full justify-center">
               {/* Income Bar (White) */}
@@ -90,7 +90,7 @@ export default function DashboardPage() {
               
               {/* Expense Bar (Red) */}
               <div className="w-2 bg-[#4c4e51] group-hover:bg-[#ff4444] transition-all duration-300 rounded-t-sm relative" style={{ height: `${data.expensePct}%`, minHeight: data.expensePct > 0 ? '4px' : '0' }}>
-                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-[#ff4444] text-white text-[9px] px-2 py-1 rounded shadow-lg font-bold pointer-events-none transition-opacity z-20 whitespace-nowrap">
+                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-[#ff4444] text-gray-900 dark:text-white text-[9px] px-2 py-1 rounded shadow-lg font-bold pointer-events-none transition-opacity z-20 whitespace-nowrap">
                   {formatCurrency(data.expenseRaw)}
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
           ))}
         </div>
         
-        <div className="flex justify-between text-[9px] text-[#8a8a8a] font-medium tracking-[0.1em] uppercase relative z-10 pt-2">
+        <div className="flex justify-between text-[9px] text-gray-500 dark:text-[#8a8a8a] font-medium tracking-[0.1em] uppercase relative z-10 pt-2">
           {annualData.map((d, i) => (
             <span key={i} className="w-full text-center">{d.month}</span>
           ))}
@@ -127,8 +127,8 @@ export default function DashboardPage() {
             d: getLinePath(recentExpense)
           }
         ].map((chart, idx) => (
-          <div key={idx} className="space-y-6 bg-[#151618] p-8 rounded-xl border border-[#1e1f22] hover:border-[#2a2c30] transition-colors group">
-            <h3 className="text-[11px] font-bold text-[#8a8a8a] tracking-[0.2em] uppercase">{chart.title}</h3>
+          <div key={idx} className="space-y-6 bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] hover:border-gray-200 dark:border-[#2a2c30] transition-colors group">
+            <h3 className="text-[11px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase">{chart.title}</h3>
             
             <div className="relative h-16 w-full flex items-center overflow-visible">
               <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full stroke-[#4c4e51] group-hover:stroke-white transition-colors duration-500 stroke-[1.5px] fill-transparent stroke-linecap-round stroke-linejoin-round overflow-visible">
@@ -137,8 +137,8 @@ export default function DashboardPage() {
             </div>
             
             <div>
-              <p className="text-[24px] font-medium text-white tracking-tight">{chart.val}</p>
-              <p className="text-[10px] text-[#4c4e51] mt-1 tracking-wider">{chart.date}</p>
+              <p className="text-[24px] font-medium text-gray-900 dark:text-white tracking-tight">{chart.val}</p>
+              <p className="text-[10px] text-gray-400 dark:text-[#4c4e51] mt-1 tracking-wider">{chart.date}</p>
             </div>
           </div>
         ))}
@@ -146,3 +146,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+
