@@ -5,7 +5,7 @@ import { ref, get, set } from "firebase/database";
 import { auth, googleProvider, database } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
-export type UserRole = "tesoureiro" | "coordenador" | "usuario" | null;
+export type UserRole = "tesoureiro" | "coordenador" | "usuario" | "pendente" | "bloqueado" | null;
 
 interface AuthContextType {
   user: User | null;
