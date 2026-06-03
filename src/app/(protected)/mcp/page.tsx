@@ -22,7 +22,7 @@ export default function MCPPage() {
   const [newBatchName, setNewBatchName] = useState("");
 
   const [isNewSupplierModalOpen, setIsNewSupplierModalOpen] = useState(false);
-  const [newSupplierData, setNewSupplierData] = useState({ name: '', document: '', phone: '', minOrder: 0, street: '', number: '', neighborhood: '', city: '', zip: '' });
+  const [newSupplierData, setNewSupplierData] = useState({ name: '', document: '', phone: '', minOrder: '', street: '', number: '', neighborhood: '', city: '', zip: '' });
 
   // Inside Batch State
   const [selectedBatchId, setSelectedBatchId] = useState<string | null>(null);
@@ -47,7 +47,7 @@ export default function MCPPage() {
       name: newSupplierData.name,
       document: newSupplierData.document,
       phone: newSupplierData.phone,
-      minOrder: Number(newSupplierData.minOrder),
+      minOrder: newSupplierData.minOrder,
       address: {
         street: newSupplierData.street,
         number: newSupplierData.number,
@@ -57,7 +57,7 @@ export default function MCPPage() {
       }
     });
     setIsNewSupplierModalOpen(false);
-    setNewSupplierData({ name: '', document: '', phone: '', minOrder: 0, street: '', number: '', neighborhood: '', city: '', zip: '' });
+    setNewSupplierData({ name: '', document: '', phone: '', minOrder: '', street: '', number: '', neighborhood: '', city: '', zip: '' });
   };
 
   // BATCH VIEW
@@ -204,7 +204,7 @@ export default function MCPPage() {
                         </td>
                         <td className="p-4 text-gray-600 dark:text-gray-300">{s.document || '-'}</td>
                         <td className="p-4 text-gray-600 dark:text-gray-300">{s.phone || '-'}</td>
-                        <td className="p-4 text-gray-600 dark:text-gray-300">{formatCurrency(s.minOrder)}</td>
+                        <td className="p-4 text-gray-600 dark:text-gray-300">{s.minOrder || '-'}</td>
                         <td className="p-4 text-center">
                           <button onClick={() => {if(confirm("Excluir?")) deleteSupplier(s.id)}} className="text-red-400 hover:text-red-600 p-2"><Trash2 className="w-4 h-4"/></button>
                         </td>
@@ -297,7 +297,7 @@ export default function MCPPage() {
                   <select value={selectedSupplierToAdd} onChange={e => setSelectedSupplierToAdd(e.target.value)} className="p-2 border border-gray-300 dark:border-[#2a2c30] rounded-lg bg-white dark:bg-[#1e2023] flex-1">
                     <option value="">Selecione um fornecedor da base...</option>
                     {suppliers.filter(s => !selectedBatch.supplierMeta[s.id]).map(s => (
-                      <option key={s.id} value={s.id}>{s.name} (Min: {formatCurrency(s.minOrder)})</option>
+                      <option key={s.id} value={s.id}>{s.name} (Min: {s.minOrder || '-'})</option>
                     ))}
                   </select>
                   <button onClick={() => { if(selectedSupplierToAdd) addSupplierToBatch(selectedBatch.id, selectedSupplierToAdd, 0, '') }} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-sm">Vincular</button>
@@ -444,8 +444,8 @@ export default function MCPPage() {
               <input placeholder="Telefone" value={newSupplierData.phone} onChange={e => setNewSupplierData({...newSupplierData, phone: e.target.value})} className="w-1/2 p-2 bg-gray-50 dark:bg-[#121315] border border-gray-300 dark:border-[#2a2c30] rounded-lg text-sm" />
             </div>
             <div className="flex gap-2 items-center">
-              <span className="text-sm text-gray-500 whitespace-nowrap">Pedido Mínimo (R$):</span>
-              <input type="number" required placeholder="Ex: 500" value={newSupplierData.minOrder || ''} onChange={e => setNewSupplierData({...newSupplierData, minOrder: Number(e.target.value)})} className="w-full p-2 bg-gray-50 dark:bg-[#121315] border border-gray-300 dark:border-[#2a2c30] rounded-lg text-sm" />
+              <span className="text-sm text-gray-500 whitespace-nowrap">Pedido Mínimo:</span>
+              <input type="text" required placeholder="Ex: 50 un/item ou R$ 500" value={newSupplierData.minOrder || ''} onChange={e => setNewSupplierData({...newSupplierData, minOrder: e.target.value})} className="w-full p-2 bg-gray-50 dark:bg-[#121315] border border-gray-300 dark:border-[#2a2c30] rounded-lg text-sm" />
             </div>
             <div className="border-t border-gray-200 dark:border-zinc-800 pt-3 space-y-2">
               <h4 className="text-xs font-bold text-gray-500 uppercase">Endereço</h4>

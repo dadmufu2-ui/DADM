@@ -15,7 +15,7 @@ export interface Supplier {
   name: string;
   document: string; // CNPJ ou CPF
   phone: string;
-  minOrder: number;
+  minOrder: string;
   address: Address;
   createdAt: number;
 }
