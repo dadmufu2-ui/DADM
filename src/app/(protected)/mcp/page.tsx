@@ -162,10 +162,21 @@ export default function MCPPage() {
                 {batches.map(batch => (
                   <div key={batch.id} onClick={() => setSelectedBatchId(batch.id)} className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-xl p-5 cursor-pointer hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">{batch.name}</h3>
-                      <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${batch.status === 'Finalizado' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
-                        {batch.status}
-                      </span>
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 pr-2">{batch.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${batch.status === 'Finalizado' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
+                          {batch.status}
+                        </span>
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            if(confirm("Tem certeza que deseja excluir este lote inteiro?")) deleteBatch(batch.id); 
+                          }} 
+                          className="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 p-1 rounded transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mb-4">Criado em {new Date(batch.createdAt).toLocaleDateString()}</p>
                     <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-100 dark:border-[#2a2c30] pt-3">
@@ -249,6 +260,9 @@ export default function MCPPage() {
                   <CheckCircle2 className="w-4 h-4" /> Finalizar Cotação
                 </button>
               )}
+              <button onClick={() => { if(confirm("Deseja realmente excluir este lote inteiro?")) { deleteBatch(selectedBatch.id); setSelectedBatchId(null); } }} className="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-600 px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2">
+                <Trash2 className="w-4 h-4" /> Excluir
+              </button>
             </div>
           </div>
 
