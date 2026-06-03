@@ -127,9 +127,6 @@ export default function PedidosPage() {
 
     // 3. Aguardar a renderização do React (fechar modal e abrir cards)
     setTimeout(async () => {
-      // 4. Chama a impressão limpa
-      window.print();
-
       // Calcular sobras para o estoque
       const newStockItems: any[] = [];
       Object.entries(supplierInputs).forEach(([prodName, inputs]) => {
@@ -156,16 +153,22 @@ export default function PedidosPage() {
           for (const item of newStockItems) {
             await addItem(item);
           }
-          alert("Lote processado. Sobras adicionadas ao estoque com sucesso!");
+          alert("Lote processado. Sobras adicionadas ao estoque com sucesso!\n\nClique em OK para gerar o PDF.");
         } else if (role === "coordenador") {
           await createBatchRequest(newStockItems, user?.email || "unknown");
-          alert("Lote processado. As sobras foram enviadas para aprovação do Tesoureiro.");
+          alert("Lote processado. As sobras foram enviadas para aprovação.\n\nClique em OK para gerar o PDF.");
         }
       } else {
-        alert("Lote processado. Nenhuma sobra para ser enviada ao estoque.");
+        alert("Lote processado.\n\nClique em OK para gerar o PDF.");
       }
 
       setIsProcessed(true);
+      
+      // Chama a impressão somente DEPOIS que o usuário fechar o alert()
+      // Isso impede que a thread do navegador seja travada durante a geração do arquivo!
+      setTimeout(() => {
+        window.print();
+      }, 500);
     }, 500);
   };
 
