@@ -44,11 +44,11 @@ export async function GET(request: Request) {
     };
 
     const payload = {
-      caixa: formatToArray(data.caixa),
+      caixa: formatToArray(data.transactions),
       fornecedores: formatToArray(data.suppliers),
       lotes_mcp: formatToArray(data.mcp_batches),
       reembolsos: formatToArray(data.reimbursements),
-      usuarios: formatToArray(data.users),
+      usuarios: formatToArray(data.roles),
       projetos: formatToArray(data.projects),
     };
 
