@@ -56,6 +56,6 @@ export function Sidebar() {
           <LogOut className="w-[18px] h-[18px]" />
         </button>
       </div>
-    </div>
+    </aside>
   );
 }
