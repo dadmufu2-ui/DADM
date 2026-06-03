@@ -91,12 +91,9 @@ export default function MCPPage() {
         if (!quote.basePrice) return;
         const itemBaseTotal = quote.basePrice * item.quantity;
         
-        const icmsVal = quote.icmsType === '%' ? itemBaseTotal * (Number(quote.icms || 0) / 100) : Number(quote.icms || 0) * item.quantity;
-        const ipiVal = quote.ipiType === '%' ? itemBaseTotal * (Number(quote.ipi || 0) / 100) : Number(quote.ipi || 0) * item.quantity;
-        const pisCofinsVal = quote.pisCofinsType === '%' ? itemBaseTotal * (Number(quote.pisCofins || 0) / 100) : Number(quote.pisCofins || 0) * item.quantity;
-        // Se for em R$, multiplicamos pela quantidade para ter o custo total do imposto daquele lote de itens
+        const otherCostsVal = quote.otherCostsType === '%' ? itemBaseTotal * (Number(quote.otherCosts || 0) / 100) : Number(quote.otherCosts || 0) * item.quantity;
         
-        const itemTotalWithTaxes = itemBaseTotal + icmsVal + ipiVal + pisCofinsVal;
+        const itemTotalWithTaxes = itemBaseTotal + otherCostsVal;
         
         const suppBaseTotal = supplierTotalsBase[suppId] || 1;
         const freightRatio = itemBaseTotal / suppBaseTotal;
@@ -368,7 +365,7 @@ export default function MCPPage() {
                           </td>
                           
                           {Object.keys(selectedBatch.supplierMeta || {}).map(suppId => {
-                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, minQuantity: 0, icms: 0, icmsType: '%', ipi: 0, ipiType: '%', pisCofins: 0, pisCofinsType: '%' };
+                            const quote = (item.quotes || {})[suppId] || { basePrice: 0, minQuantity: 0, otherCosts: 0, otherCostsType: '%' };
                             const isWinner = winners[itemId]?.supplierId === suppId;
                             const handleUpdate = (field: string, val: string | number) => {
                               saveQuote(selectedBatch.id, itemId, suppId, { ...quote, [field]: val });
@@ -386,26 +383,12 @@ export default function MCPPage() {
                                     <span className="text-gray-500">Qtd Mínima</span>
                                     <input type="number" value={quote.minQuantity || ''} onChange={e => handleUpdate('minQuantity', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-white dark:bg-zinc-800" />
                                   </div>
-                                  <div className="flex flex-col">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-gray-500">ICMS</span>
-                                      <button onClick={() => handleUpdate('icmsType', quote.icmsType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.icmsType || '%'}</button>
-                                    </div>
-                                    <input type="number" step="0.01" value={quote.icms || ''} onChange={e => handleUpdate('icms', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-gray-500">IPI</span>
-                                      <button onClick={() => handleUpdate('ipiType', quote.ipiType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.ipiType || '%'}</button>
-                                    </div>
-                                    <input type="number" step="0.01" value={quote.ipi || ''} onChange={e => handleUpdate('ipi', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
-                                  </div>
                                   <div className="flex flex-col col-span-2">
                                     <div className="flex items-center justify-between">
-                                      <span className="text-gray-500">PIS/COF</span>
-                                      <button onClick={() => handleUpdate('pisCofinsType', quote.pisCofinsType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.pisCofinsType || '%'}</button>
+                                      <span className="text-gray-500">Outros Custos</span>
+                                      <button onClick={() => handleUpdate('otherCostsType', quote.otherCostsType === '%' ? 'R$' : '%')} className="text-indigo-500 font-bold hover:bg-gray-100 rounded px-1">{quote.otherCostsType || '%'}</button>
                                     </div>
-                                    <input type="number" step="0.01" value={quote.pisCofins || ''} onChange={e => handleUpdate('pisCofins', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
+                                    <input type="number" step="0.01" value={quote.otherCosts || ''} onChange={e => handleUpdate('otherCosts', Number(e.target.value))} className="p-1 border border-gray-200 dark:border-zinc-700 rounded bg-transparent" />
                                   </div>
                                 </div>
                                 <div className="mt-2 text-center pt-2 border-t border-gray-200 dark:border-zinc-700">
