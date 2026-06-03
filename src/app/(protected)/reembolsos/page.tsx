@@ -2,12 +2,12 @@
 import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useReimbursements } from "@/hooks/useReimbursements";
-import { Ticket, CheckCircle, XCircle, Clock, Link as LinkIcon, Send, UploadCloud, Loader2 } from "lucide-react";
+import { Ticket, CheckCircle, XCircle, Clock, Link as LinkIcon, Send, UploadCloud, Loader2, Trash2 } from "lucide-react";
 import { useTransactions } from "@/hooks/useTransactions";
 
 export default function ReembolsosPage() {
   const { user, role } = useAuth();
-  const { reimbursements, loading, createRequest, updateStatus } = useReimbursements();
+  const { reimbursements, loading, createRequest, updateStatus, deleteRequest } = useReimbursements();
   const { addTransaction } = useTransactions();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -163,7 +163,7 @@ export default function ReembolsosPage() {
                   <th className="px-6 py-3">Detalhes</th>
                   <th className="px-6 py-3">Comprovante</th>
                   <th className="px-6 py-3">Status</th>
-                  {isBoard && <th className="px-6 py-3 text-right">Ações (Diretoria)</th>}
+                  <th className="px-6 py-3 text-right">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,38 +194,52 @@ export default function ReembolsosPage() {
                         {req.status.toUpperCase()}
                       </span>
                     </td>
-                    {isBoard && (
-                      <td className="px-6 py-4 flex gap-2 justify-end">
-                        {req.status === 'pendente' ? (
-                          <>
-                            <button 
-                              onClick={async () => {
-                                await updateStatus(req.id, "aprovado");
-                                await addTransaction({
-                                  description: `Reembolso: ${req.description}`,
-                                  amount: req.amount,
-                                  type: 'expense',
-                                  date: Date.now(),
-                                  category: 'Reembolsos',
-                                  createdByEmail: user?.email || "unknown@system",
-                                  timestamp: Date.now(),
-                                  createdAtIso: new Date().toISOString()
-                                });
-                                alert("Reembolso aprovado e debitado do caixa!");
-                              }} 
-                              className="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded font-medium"
-                            >
-                              Aprovar
-                            </button>
-                            <button onClick={() => updateStatus(req.id, "recusado")} className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded font-medium">
-                              Recusar
-                            </button>
-                          </>
-                        ) : (
-                          <span className="text-[10px] text-gray-400 dark:text-[#4c4e51] uppercase">Julgado</span>
-                        )}
-                      </td>
-                    )}
+                    <td className="px-6 py-4 flex gap-2 justify-end">
+                      {isBoard && req.status === 'pendente' && (
+                        <>
+                          <button 
+                            onClick={async () => {
+                              await updateStatus(req.id, "aprovado");
+                              await addTransaction({
+                                description: `Reembolso: ${req.description}`,
+                                amount: req.amount,
+                                type: 'expense',
+                                date: Date.now(),
+                                category: 'Reembolsos',
+                                createdByEmail: user?.email || "unknown@system",
+                                timestamp: Date.now(),
+                                createdAtIso: new Date().toISOString()
+                              });
+                              alert("Reembolso aprovado e debitado do caixa!");
+                            }} 
+                            className="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded font-medium"
+                          >
+                            Aprovar
+                          </button>
+                          <button onClick={() => updateStatus(req.id, "recusado")} className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded font-medium">
+                            Recusar
+                          </button>
+                        </>
+                      )}
+                      
+                      {isBoard && req.status !== 'pendente' && (
+                        <span className="text-[10px] text-gray-400 dark:text-[#4c4e51] uppercase flex items-center mr-2">Julgado</span>
+                      )}
+
+                      {(isBoard || (req.requestedByEmail === user?.email && req.status === 'pendente')) && (
+                        <button 
+                          onClick={async () => {
+                            if(confirm("Tem certeza que deseja excluir este reembolso?")) {
+                              await deleteRequest(req.id);
+                            }
+                          }} 
+                          className="text-xs bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-red-900/50 text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 p-1.5 rounded transition-colors"
+                          title="Excluir pedido"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

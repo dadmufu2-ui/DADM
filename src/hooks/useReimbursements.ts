@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ref, onValue, push, set, update } from "firebase/database";
+import { ref, onValue, push, set, update, remove } from "firebase/database";
 import { database } from "@/lib/firebase";
 
 export interface ReimbursementRequest {
@@ -52,5 +52,10 @@ export function useReimbursements() {
     await update(rRef, { status: newStatus });
   };
 
-  return { reimbursements, loading, createRequest, updateStatus };
+  const deleteRequest = async (id: string) => {
+    const rRef = ref(database, `reimbursements/${id}`);
+    await remove(rRef);
+  };
+
+  return { reimbursements, loading, createRequest, updateStatus, deleteRequest };
 }
