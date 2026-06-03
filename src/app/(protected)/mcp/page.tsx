@@ -233,8 +233,8 @@ export default function MCPPage() {
       ) : selectedBatch && (
         <div className="bg-white dark:bg-[#1e2023] border border-gray-200 dark:border-[#2a2c30] rounded-xl overflow-hidden shadow-sm print:shadow-none print:border-none">
           {/* TOPO DO BATCH */}
-          <div className="p-6 border-b border-gray-200 dark:border-[#2a2c30] flex justify-between items-center bg-gray-50 dark:bg-[#151618] print:bg-white">
-            <div className="flex items-center gap-4 print:hidden">
+          <div className="p-6 border-b border-gray-200 dark:border-[#2a2c30] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-50 dark:bg-[#151618] print:bg-white">
+            <div className="flex items-center gap-4 print:hidden w-full md:w-auto">
               <button onClick={() => setSelectedBatchId(null)} className="p-2 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-full transition-colors">
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -251,7 +251,7 @@ export default function MCPPage() {
               <p className="text-xs text-gray-500 mt-2">Documento gerado pelo sistema para auxiliar na tomada de decisão de compras.</p>
             </div>
 
-            <div className="flex items-center gap-3 print:hidden">
+            <div className="flex flex-wrap items-center gap-3 print:hidden w-full md:w-auto">
               <button onClick={() => window.print()} className="bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2">
                 <Printer className="w-4 h-4" /> Exportar PDF Vencedores
               </button>

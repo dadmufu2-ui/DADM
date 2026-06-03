@@ -205,13 +205,13 @@ export default function CaixaPage() {
           </div>
         )}
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Caixa</h1>
             <p className="text-gray-500 dark:text-zinc-400 mt-1">Gerencie entradas e saídas financeiras do diretório.</p>
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-2 md:gap-4 w-full md:w-auto mt-2 md:mt-0">
             {role === "tesoureiro" && (
               <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
                 <DialogTrigger className="flex items-center gap-2 bg-gray-900 dark:bg-[#2a2c30] hover:bg-gray-800 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">

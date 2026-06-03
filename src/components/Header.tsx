@@ -21,7 +21,7 @@ export function Header() {
   const displayName = user?.displayName || user?.email?.split('@')[0] || "Usuário";
 
   return (
-    <header className="h-auto md:h-32 bg-transparent flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 z-10 w-full pt-6 gap-6 md:gap-0 print:hidden">
+    <header className="h-auto md:h-32 bg-transparent flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 z-10 w-full pt-6 pb-8 md:pb-0 gap-6 md:gap-0 shrink-0 print:hidden">
       <div className="flex flex-col w-full md:w-auto mt-4 md:mt-0">
         <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Equipe Financeira</span>
         <h2 className="text-[22px] md:text-[26px] font-medium text-gray-900 dark:text-white tracking-wide break-words">
