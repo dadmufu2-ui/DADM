@@ -114,10 +114,8 @@ export default function EstoquePage() {
 
             {canEdit && (
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogTrigger asChild>
-                  <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                    <Plus className="w-4 h-4" /> Adicionar Lote
-                  </button>
+                <DialogTrigger className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                  <Plus className="w-4 h-4" /> Adicionar Lote
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[500px] bg-[#1e2023] border-[#2a2c30] text-white">
                   <DialogHeader>
