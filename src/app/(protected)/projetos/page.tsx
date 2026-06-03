@@ -162,14 +162,29 @@ export default function ProjetosPage() {
                       <DialogTitle className="text-xl">{selectedProject.name}</DialogTitle>
                       <p className="text-sm text-gray-500 mt-1">{selectedProject.description}</p>
                     </div>
-                    {canCreateAndProcess && selectedProject.status === "Aberto" && (
-                      <button 
-                        onClick={() => handleProcessProject(selectedProject.id)}
-                        className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors"
-                      >
-                        <PlayCircle className="w-4 h-4" /> Processar e Fechar
-                      </button>
-                    )}
+                    <div className="flex gap-2 items-center">
+                      {canCreateAndProcess && selectedProject.status === "Aberto" && (
+                        <button 
+                          onClick={() => handleProcessProject(selectedProject.id)}
+                          className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors"
+                        >
+                          <PlayCircle className="w-4 h-4" /> Processar e Fechar
+                        </button>
+                      )}
+                      {(role === 'tesoureiro' || role === 'coordenador') && (
+                        <button 
+                          onClick={async () => {
+                            if (confirm("Tem certeza que deseja excluir ESTE PROJETO INTEIRO e todos os seus lançamentos? Esta ação não pode ser desfeita.")) {
+                              await deleteProject(selectedProject.id);
+                              setSelectedProjectId(null);
+                            }
+                          }}
+                          className="bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400 px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" /> Excluir
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </DialogHeader>
 
