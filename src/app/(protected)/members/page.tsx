@@ -71,16 +71,16 @@ export default function MembersPage() {
       return;
     }
 
-    const newRole = prompt(`Digite o novo nível para ${email}:\nOpções: tesoureiro, coordenador, usuario, bloqueado\n(Dica: novos logins entram como "pendente")`, currentRole);
+    const newRole = prompt(`Digite o novo nível para ${email}:\nOpções: tesoureiro, coordenador, adm_area, usuario_area, usuario, bloqueado\n(Dica: novos logins entram como "pendente")`, currentRole);
     
-    if (newRole && ["tesoureiro", "coordenador", "usuario", "bloqueado"].includes(newRole.toLowerCase())) {
+    if (newRole && ["tesoureiro", "coordenador", "adm_area", "usuario_area", "usuario", "bloqueado"].includes(newRole.toLowerCase())) {
       try {
         await update(ref(database, `roles/${id}`), { role: newRole.toLowerCase() });
       } catch (error) {
         alert("Erro ao atualizar o nível de acesso.");
       }
     } else if (newRole) {
-      alert("Nível inválido. Use apenas: tesoureiro, coordenador, usuario ou bloqueado.");
+      alert("Nível inválido. Use apenas: tesoureiro, coordenador, adm_area, usuario_area, usuario ou bloqueado.");
     }
   };
 
