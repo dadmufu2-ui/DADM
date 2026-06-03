@@ -61,16 +61,16 @@ export default function ReembolsosPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Descrição do Gasto</label>
-                <input required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Compra de Copos para a Festa" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+                <input required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Compra de Copos para a Festa" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Valor (R$)</label>
-                <input required type="number" step="0.01" min="0" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="150.50" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+                <input required type="number" step="0.01" min="0" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="150.50" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Link do Comprovante (Nota Fiscal / Recibo)</label>
-              <input required type="url" value={formData.receiptLink} onChange={e => setFormData({...formData, receiptLink: e.target.value})} placeholder="https://drive.google.com/..." className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+              <input required type="url" value={formData.receiptLink} onChange={e => setFormData({...formData, receiptLink: e.target.value})} placeholder="https://drive.google.com/..." className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
             </div>
             <button type="submit" className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium transition-colors text-sm">
               Enviar Solicitação
@@ -151,5 +151,6 @@ export default function ReembolsosPage() {
     </div>
   );
 }
+
 
 

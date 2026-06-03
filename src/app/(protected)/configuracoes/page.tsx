@@ -138,7 +138,7 @@ export default function ConfiguracoesPage() {
                         <select 
                           value={user.role || ""} 
                           onChange={(e) => changeUserRole(user.id, user.email, e.target.value as UserRole)}
-                          className="bg-gray-50 dark:bg-[#121315] border border-[#4c4e51] text-white text-xs rounded px-2 py-1 outline-none focus:border-indigo-500"
+                          className="bg-gray-50 dark:bg-[#121315] border border-[#4c4e51] text-gray-900 dark:text-white text-xs rounded px-2 py-1 outline-none focus:border-indigo-500"
                         >
                           <option value="usuario">Usuário Comum</option>
                           <option value="coordenador">Coordenador</option>
@@ -203,7 +203,7 @@ export default function ConfiguracoesPage() {
                           <button onClick={() => { if(confirm("Confirmar a exclusão definitiva deste item do banco de dados?")) approveRequest(req); }} className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
                             <Trash2 className="w-3 h-3" /> Excluir Item
                           </button>
-                          <button onClick={() => removeRequest(req.id)} className="flex items-center gap-1 bg-[#2a2c30] hover:bg-[#4c4e51] text-white px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
+                          <button onClick={() => removeRequest(req.id)} className="flex items-center gap-1 bg-gray-200 dark:bg-[#2a2c30] hover:bg-gray-300 dark:hover:bg-[#4c4e51] text-white px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
                             Manter Item
                           </button>
                         </td>
@@ -268,5 +268,6 @@ export default function ConfiguracoesPage() {
     </div>
   );
 }
+
 
 

@@ -30,7 +30,7 @@ export default function RootLayout({
       className={`${montserrat.className} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 dark:bg-gray-50 dark:bg-[#121315] dark:text-white selection:bg-indigo-500/30 selection:text-indigo-900 dark:selection:bg-[#4c4e51] dark:selection:text-white">
+      <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 dark:bg-[#121315] dark:text-white selection:bg-indigo-500/30 selection:text-indigo-900 dark:selection:bg-[#4c4e51] dark:selection:text-white">
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
@@ -38,4 +38,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 

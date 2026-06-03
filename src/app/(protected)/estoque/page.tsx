@@ -111,13 +111,13 @@ export default function EstoquePage() {
       <div className="space-y-6 no-print">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-900 dark:text-white">Controle de Estoque</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Estoque</h1>
             <p className="text-gray-500 dark:text-zinc-400 mt-1">Gerencie produtos e calcule lucro real dinamicamente.</p>
           </div>
           
           <div className="flex gap-4">
             {role === "tesoureiro" && (
-               <button onClick={handlePrint} className="flex items-center gap-2 bg-[#2a2c30] hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+               <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-200 dark:bg-[#2a2c30] hover:bg-gray-300 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                  <Printer className="w-4 h-4" /> Imprimir Inventário
                </button>
             )}
@@ -134,7 +134,7 @@ export default function EstoquePage() {
                   <form onSubmit={handleAdd} className="space-y-4 mt-4">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Nome do Produto</Label>
-                      <Input id="name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Ex: Moletom DADM G" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Input id="name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Ex: Moletom DADM G" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                     </div>
 
                     <div className="space-y-2">
@@ -144,7 +144,7 @@ export default function EstoquePage() {
                         required 
                         value={formData.category} 
                         onChange={handleCategoryChange} 
-                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
+                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
                       >
                         <option value="" disabled>Selecione uma categoria...</option>
                         {categories.map(cat => (
@@ -157,22 +157,22 @@ export default function EstoquePage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="quantity" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Quantidade</Label>
-                        <Input id="quantity" type="number" min="1" required value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Input id="quantity" type="number" min="1" required value={formData.quantity} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="salePrice" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Preço de Venda (Unidade)</Label>
-                        <Input id="salePrice" type="number" step="0.01" min="0" required value={formData.salePrice} onChange={e => setFormData({...formData, salePrice: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Input id="salePrice" type="number" step="0.01" min="0" required value={formData.salePrice} onChange={e => setFormData({...formData, salePrice: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="baseCost" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Custo Unitário (R$)</Label>
-                        <Input id="baseCost" type="number" step="0.01" min="0" required value={formData.baseCost} onChange={e => setFormData({...formData, baseCost: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Input id="baseCost" type="number" step="0.01" min="0" required value={formData.baseCost} onChange={e => setFormData({...formData, baseCost: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="additionalExpenses" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Despesas Extras Lote (Frete)</Label>
-                        <Input id="additionalExpenses" type="number" step="0.01" min="0" required value={formData.additionalExpenses} onChange={e => setFormData({...formData, additionalExpenses: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                        <Input id="additionalExpenses" type="number" step="0.01" min="0" required value={formData.additionalExpenses} onChange={e => setFormData({...formData, additionalExpenses: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                       </div>
                     </div>
 
@@ -365,5 +365,6 @@ export default function EstoquePage() {
     </>
   );
 }
+
 
 

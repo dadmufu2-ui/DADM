@@ -9,9 +9,9 @@ export default function ProtectedLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-50 dark:bg-[#121315]">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-[#121315]">
         <Sidebar />
-        <main className="flex-1 md:ml-[80px] ml-0 pb-20 md:pb-0 flex flex-col min-h-screen print:ml-0 print:bg-white overflow-x-hidden overflow-y-auto p-4 md:p-10 bg-gray-50 dark:bg-gray-50 dark:bg-[#121315]">
+        <main className="flex-1 md:ml-[80px] ml-0 pb-20 md:pb-0 flex flex-col min-h-screen print:ml-0 print:bg-white overflow-x-hidden overflow-y-auto p-4 md:p-10 bg-gray-50 dark:bg-[#121315]">
           <Header />
           <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 w-full">
             {children}
@@ -21,4 +21,5 @@ export default function ProtectedLayout({
     </ProtectedRoute>
   );
 }
+
 

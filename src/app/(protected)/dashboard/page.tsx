@@ -59,7 +59,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-16 px-4 pb-12">
       {/* First Row of Charts */}
-      <div className="space-y-8 bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] shadow-2xl relative overflow-hidden">
+      <div className="space-y-8 bg-white dark:bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] shadow-2xl relative overflow-hidden">
         {/* Subtle background grid pattern for aesthetics */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e1f22_1px,transparent_1px),linear-gradient(to_bottom,#1e1f22_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 pointer-events-none"></div>
         
@@ -127,7 +127,7 @@ export default function DashboardPage() {
             d: getLinePath(recentExpense)
           }
         ].map((chart, idx) => (
-          <div key={idx} className="space-y-6 bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] hover:border-gray-200 dark:border-[#2a2c30] transition-colors group">
+          <div key={idx} className="space-y-6 bg-white dark:bg-[#151618] p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] hover:border-gray-200 dark:border-[#2a2c30] transition-colors group">
             <h3 className="text-[11px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase">{chart.title}</h3>
             
             <div className="relative h-16 w-full flex items-center overflow-visible">
@@ -146,5 +146,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
 

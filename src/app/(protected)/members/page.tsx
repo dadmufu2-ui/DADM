@@ -98,7 +98,7 @@ export default function MembersPage() {
         </div>
       </div>
 
-      <div className="bg-[#151618] rounded-xl border border-gray-200 dark:border-[#1e1f22] overflow-hidden shadow-2xl">
+      <div className="bg-white dark:bg-[#151618] rounded-xl border border-gray-200 dark:border-[#1e1f22] overflow-hidden shadow-2xl">
         <div className="p-6 border-b border-gray-200 dark:border-[#1e1f22] flex items-center justify-between">
           <div className="relative w-[300px]">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#4c4e51]" />
@@ -106,7 +106,7 @@ export default function MembersPage() {
               placeholder="Buscar por email ou nível..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white pl-10 focus-visible:ring-[#4c4e51] h-10 rounded-md"
+              className="w-full bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white pl-10 focus-visible:ring-[#4c4e51] h-10 rounded-md"
             />
           </div>
           
@@ -141,7 +141,7 @@ export default function MembersPage() {
               </TableRow>
             ) : (
               filteredMembers.map((member) => (
-                <TableRow key={member.id} className="border-gray-200 dark:border-[#1e1f22] hover:bg-[#1a1b1e] transition-colors group">
+                <TableRow key={member.id} className="border-gray-200 dark:border-[#1e1f22] hover:bg-gray-50 dark:hover:bg-[#1a1b1e] transition-colors group">
                   <TableCell className="py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-white dark:bg-[#1e2023] flex items-center justify-center text-gray-500 dark:text-[#8a8a8a] border border-gray-200 dark:border-[#2a2c30]">
@@ -183,7 +183,7 @@ export default function MembersPage() {
                           <button 
                             title="Editar Nível" 
                             onClick={() => handleRoleChange(member.id, member.email, member.role)}
-                            className="p-1.5 text-gray-400 dark:text-[#4c4e51] hover:text-white hover:bg-[#2a2c30] rounded transition-colors"
+                            className="p-1.5 text-gray-400 dark:text-[#4c4e51] hover:text-white hover:bg-gray-200 dark:bg-[#2a2c30] rounded transition-colors"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
@@ -211,5 +211,6 @@ export default function MembersPage() {
     </div>
   );
 }
+
 
 

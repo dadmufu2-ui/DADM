@@ -130,14 +130,14 @@ export default function CaixaPage() {
       <div className="space-y-6 no-print">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-900 dark:text-white">Controle de Caixa</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Caixa</h1>
             <p className="text-gray-500 dark:text-zinc-400 mt-1">Gerencie entradas e saídas financeiras do diretório.</p>
           </div>
           
           <div className="flex gap-4">
             {role === "tesoureiro" && (
               <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
-                <DialogTrigger className="flex items-center gap-2 bg-[#2a2c30] hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                <DialogTrigger className="flex items-center gap-2 bg-gray-200 dark:bg-[#2a2c30] hover:bg-gray-300 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Printer className="w-4 h-4" /> Relatório DRE
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
@@ -187,7 +187,7 @@ export default function CaixaPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="description" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Descrição</Label>
-                      <Input id="description" required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Mensalidades Setembro" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Input id="description" required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Mensalidades Setembro" className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                     </div>
                     
                     <div className="space-y-2">
@@ -197,7 +197,7 @@ export default function CaixaPage() {
                         required 
                         value={formData.category} 
                         onChange={handleCategoryChange} 
-                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
+                        className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
                       >
                         <option value="" disabled>Selecione uma categoria...</option>
                         {categories.map(cat => (
@@ -209,7 +209,7 @@ export default function CaixaPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="amount" className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Valor (R$)</Label>
-                      <Input id="amount" type="number" step="0.01" min="0.01" required value={formData.amount} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white focus-visible:ring-[#4c4e51]" />
+                      <Input id="amount" type="number" step="0.01" min="0.01" required value={formData.amount} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" />
                     </div>
 
                     <div className="pt-4 flex justify-end">
@@ -276,7 +276,7 @@ export default function CaixaPage() {
                     </TableCell>
                     <TableCell className="font-medium text-white">{tx.description}</TableCell>
                     <TableCell>
-                      <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-[#151618] px-2 py-1 rounded">
+                      <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-white dark:bg-[#151618] px-2 py-1 rounded">
                         {tx.category}
                       </span>
                     </TableCell>
@@ -386,5 +386,6 @@ export default function CaixaPage() {
     </>
   );
 }
+
 
 

@@ -23,23 +23,23 @@ export function Header() {
   return (
     <header className="h-32 bg-transparent flex items-center justify-between px-10 z-10 w-full pt-6 print:hidden">
       <div className="flex flex-col">
-        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Equipe Financeira</span>
-        <h2 className="text-[26px] font-medium text-gray-900 dark:text-gray-900 dark:text-white tracking-wide">
+        <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Equipe Financeira</span>
+        <h2 className="text-[26px] font-medium text-gray-900 dark:text-white tracking-wide">
           Bem-vindo, {displayName}.
         </h2>
       </div>
       
       <div className="flex items-center gap-8">
         <div className="flex flex-col items-end text-right">
-          <span className="text-[10px] font-bold text-gray-500 dark:text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Saldo Consolidado</span>
-          <h2 className="text-[26px] font-medium text-gray-900 dark:text-gray-900 dark:text-white tracking-wide flex items-center gap-3">
-            <span className="text-gray-500 dark:text-gray-500 dark:text-[#8a8a8a] text-lg font-light">R$</span> {formatCurrency(balance)}
+          <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Saldo Consolidado</span>
+          <h2 className="text-[26px] font-medium text-gray-900 dark:text-white tracking-wide flex items-center gap-3">
+            <span className="text-gray-500 dark:text-[#8a8a8a] text-lg font-light">R$</span> {formatCurrency(balance)}
           </h2>
         </div>
         
         <button 
           onClick={toggleTheme} 
-          className="p-3 rounded-full bg-gray-200 dark:bg-gray-100 dark:bg-[#1e1f22] text-gray-600 dark:text-gray-500 dark:text-[#8a8a8a] hover:bg-gray-300 dark:hover:bg-[#2a2c30] transition-colors"
+          className="p-3 rounded-full bg-gray-200 dark:bg-[#1e1f22] text-gray-600 dark:text-[#8a8a8a] hover:bg-gray-300 dark:hover:bg-gray-200 dark:bg-[#2a2c30] transition-colors"
           title="Alternar Tema Claro/Escuro"
         >
           {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -48,5 +48,6 @@ export function Header() {
     </header>
   );
 }
+
 
 
