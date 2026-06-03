@@ -19,6 +19,8 @@ export interface Transaction {
   createdAtIso: string;
   timestamp: number;
   metadata?: any;
+  isProject?: boolean;
+  projectEntries?: any[];
 }
 
 export interface InventoryItem {

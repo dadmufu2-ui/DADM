@@ -3,26 +3,35 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart } from "lucide-react";
+import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart, FolderOpen } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
   const { role } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const routes = role === 'usuario' 
-    ? [
-        { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
-      ]
-    : [
-        { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
-        { name: "PEDIDOS", path: "/pedidos", icon: ShoppingCart },
-        { name: "HISTÓRICO", path: "/historico-pedidos", icon: Receipt },
-        { name: "MEMBROS", path: "/members", icon: Users },
-        { name: "CAIXA", path: "/caixa", icon: Database },
-        { name: "ESTOQUE", path: "/estoque", icon: BarChart3 },
-        { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
-      ];
+  let routes: any[] = [];
+  if (role === 'usuario') {
+    routes = [
+      { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
+    ];
+  } else if (role === 'usuario_area' || role === 'adm_area') {
+    routes = [
+      { name: "PROJETOS", path: "/projetos", icon: FolderOpen },
+      { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
+    ];
+  } else {
+    routes = [
+      { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
+      { name: "PROJETOS", path: "/projetos", icon: FolderOpen },
+      { name: "PEDIDOS", path: "/pedidos", icon: ShoppingCart },
+      { name: "HISTÓRICO", path: "/historico-pedidos", icon: Receipt },
+      { name: "MEMBROS", path: "/members", icon: Users },
+      { name: "CAIXA", path: "/caixa", icon: Database },
+      { name: "ESTOQUE", path: "/estoque", icon: BarChart3 },
+      { name: "REEMBOLSOS", path: "/reembolsos", icon: Ticket },
+    ];
+  }
 
   const handleLogout = () => {
     window.location.href = '/login';

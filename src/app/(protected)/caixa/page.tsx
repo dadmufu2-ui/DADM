@@ -1,10 +1,11 @@
 "use client";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTransactions } from "@/hooks/useTransactions";
+import { useProjects } from "@/hooks/useProjects";
 import { useCategories } from "@/hooks/useCategories";
 import { useDeleteRequests } from "@/hooks/useDeleteRequests";
-import { Plus, Trash2, Printer, ShieldAlert } from "lucide-react";
+import { Plus, Trash2, Printer, ShieldAlert, ChevronDown, ChevronUp, FolderOpen, CheckCircle2, XCircle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -28,7 +29,11 @@ export default function CaixaPage() {
   const { transactions, loading, addTransaction, deleteTransaction } = useTransactions();
   const { categories, addCategory } = useCategories("caixa");
   const { createRequest } = useDeleteRequests();
+  const { projects, updateProjectStatus } = useProjects();
+
+  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
   
+  const pendingProjects = projects.filter(p => p.status === "Pendente_Aprovacao");
   const [isOpen, setIsOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [reportStartDate, setReportStartDate] = useState("");
@@ -43,6 +48,39 @@ export default function CaixaPage() {
 
   const canEdit = role === "tesoureiro" || role === "coordenador";
   const canDelete = role === "tesoureiro";
+
+  const handleApproveProject = async (project: any) => {
+    let income = 0;
+    let expense = 0;
+    Object.values(project.entries).forEach((e: any) => {
+      if (e.type === 'income') income += e.amount;
+      if (e.type === 'expense') expense += e.amount;
+    });
+    const profit = income - expense;
+
+    await addTransaction({
+      description: `Projeto/Evento: ${project.name}`,
+      amount: Math.abs(profit),
+      type: profit >= 0 ? "income" : "expense",
+      category: "Eventos e Projetos",
+      date: Date.now(),
+      createdByEmail: user?.email || "unknown@system",
+      createdAtIso: new Date().toISOString(),
+      timestamp: Date.now(),
+      isProject: true,
+      projectEntries: Object.values(project.entries)
+    });
+
+    await updateProjectStatus(project.id, "Processado");
+  };
+
+  const handleRejectProject = async (projectId: string) => {
+    await updateProjectStatus(projectId, "Aberto");
+  };
+
+  const toggleProjectExpand = (txId: string) => {
+    setExpandedProjects(prev => ({ ...prev, [txId]: !prev[txId] }));
+  };
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,6 +166,45 @@ export default function CaixaPage() {
     <>
       {/* AREA VISUAL DO SISTEMA (ESCONDIDA NA IMPRESSÃO) */}
       <div className="space-y-6 no-print">
+
+        {/* FILA DE APROVAÇÃO DE PROJETOS */}
+        {role === "tesoureiro" && pendingProjects.length > 0 && (
+          <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 rounded-xl p-6 mb-8">
+            <h2 className="text-amber-800 dark:text-amber-500 font-bold flex items-center gap-2 mb-4">
+              <FolderOpen className="w-5 h-5" /> Projetos Pendentes de Aprovação no Caixa
+            </h2>
+            <div className="space-y-3">
+              {pendingProjects.map(project => {
+                let income = 0;
+                let expense = 0;
+                Object.values(project.entries).forEach((e: any) => {
+                  if (e.type === 'income') income += e.amount;
+                  if (e.type === 'expense') expense += e.amount;
+                });
+                const profit = income - expense;
+
+                return (
+                  <div key={project.id} className="bg-white dark:bg-[#1e2023] p-4 rounded-lg border border-amber-100 dark:border-amber-900/30 flex items-center justify-between">
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white">{project.name}</h3>
+                      <p className="text-xs text-gray-500">{project.description || "Sem descrição"}</p>
+                      <div className="flex gap-4 mt-2 text-xs font-bold">
+                        <span className="text-emerald-500">Ganhos: {formatCurrency(income)}</span>
+                        <span className="text-rose-500">Gastos: {formatCurrency(expense)}</span>
+                        <span className={profit >= 0 ? "text-blue-500" : "text-red-500"}>Saldo: {formatCurrency(profit)}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleApproveProject(project)} className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-1"><CheckCircle2 className="w-4 h-4"/> Aprovar e Lançar</button>
+                      <button onClick={() => handleRejectProject(project.id)} className="bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-1"><XCircle className="w-4 h-4"/> Rejeitar</button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Controle de Caixa</h1>
@@ -269,50 +346,83 @@ export default function CaixaPage() {
                 </TableRow>
               ) : (
                 transactions.map((tx) => (
-                  <TableRow key={tx.id} className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-gray-50 dark:hover:bg-[#2a2c30] transition-colors">
-                    <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
-                      {formatDate(tx.timestamp)}
-                      <div className="text-[9px] opacity-50">{tx.createdAtIso?.split('T')[0]}</div>
-                    </TableCell>
-                    <TableCell className="font-medium text-gray-900 dark:text-white">{tx.description}</TableCell>
-                    <TableCell>
-                      <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-white dark:bg-[#151618] px-2 py-1 rounded">
-                        {tx.category}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-[10px] text-gray-400 dark:text-[#4c4e51] tracking-wider">
-                      {tx.createdByEmail}
-                    </TableCell>
-                    <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
-                      {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {(role === "tesoureiro" || role === "coordenador") && (
-                        <button 
-                          onClick={async () => {
-                            if (role === "tesoureiro") {
-                              if (confirm("Excluir definitivamente este lançamento?")) deleteTransaction(tx.id);
-                            } else {
-                              const reason = prompt("Justificativa para solicitar exclusão deste lançamento:");
-                              if (reason) {
-                                await createRequest({
-                                  collection: "caixa",
-                                  itemId: tx.id,
-                                  itemNameOrDesc: `Caixa: ${tx.description} (${formatCurrency(tx.amount)}) - Motivo: ${reason}`,
-                                  requestedByEmail: user?.email || "unknown"
-                                });
-                                alert("Pedido de exclusão enviado para a Tesouraria.");
-                              }
-                            }
-                          }}
-                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
-                          title={role === 'tesoureiro' ? "Excluir Lançamento" : "Solicitar Exclusão"}
-                        >
-                          {role === 'tesoureiro' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
-                        </button>
-                      )}
-                    </TableCell>
-                  </TableRow>
+                  <React.Fragment key={tx.id}>
+                    <TableRow className="border-b border-gray-200 dark:border-[#1e2023] hover:bg-gray-50 dark:hover:bg-[#2a2c30] transition-colors cursor-pointer" onClick={() => tx.isProject && toggleProjectExpand(tx.id)}>
+                      <TableCell className="text-xs text-gray-400 dark:text-[#4c4e51]">
+                        {formatDate(tx.timestamp)}
+                        <div className="text-[9px] opacity-50">{tx.createdAtIso?.split('T')[0]}</div>
+                      </TableCell>
+                      <TableCell className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                        {tx.isProject && <FolderOpen className="w-4 h-4 text-blue-500" />}
+                        {tx.description}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-white dark:bg-[#151618] px-2 py-1 rounded">
+                          {tx.category}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-[10px] text-gray-400 dark:text-[#4c4e51] tracking-wider">
+                        {tx.createdByEmail}
+                      </TableCell>
+                      <TableCell className={`text-right font-medium ${tx.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+                        {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2 items-center">
+                          {tx.isProject && (
+                            <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                              {expandedProjects[tx.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                            </button>
+                          )}
+                          {(role === "tesoureiro" || role === "coordenador") && (
+                            <button 
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (role === "tesoureiro") {
+                                  if (confirm("Excluir definitivamente este lançamento?")) deleteTransaction(tx.id);
+                                } else {
+                                  const reason = prompt("Justificativa para solicitar exclusão deste lançamento:");
+                                  if (reason) {
+                                    await createRequest({
+                                      collection: "caixa",
+                                      itemId: tx.id,
+                                      itemNameOrDesc: `Caixa: ${tx.description} (${formatCurrency(tx.amount)}) - Motivo: ${reason}`,
+                                      requestedByEmail: user?.email || "unknown"
+                                    });
+                                    alert("Pedido de exclusão enviado para a Tesouraria.");
+                                  }
+                                }
+                              }}
+                              className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
+                              title={role === 'tesoureiro' ? "Excluir Lançamento" : "Solicitar Exclusão"}
+                            >
+                              {role === 'tesoureiro' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
+                            </button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    {tx.isProject && expandedProjects[tx.id] && tx.projectEntries && (
+                      <TableRow className="bg-gray-50/50 dark:bg-[#1a1b1e] border-b border-gray-200 dark:border-[#1e2023]">
+                        <TableCell colSpan={6} className="p-0">
+                          <div className="pl-12 pr-4 py-3 space-y-1">
+                            <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Detalhamento do Evento</h4>
+                            {tx.projectEntries.map((entry: any) => (
+                              <div key={entry.id || Math.random()} className="flex justify-between items-center text-sm border-b border-gray-100 dark:border-[#2a2c30] last:border-0 py-1">
+                                <span className="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                  <div className={`w-2 h-2 rounded-full ${entry.type === 'income' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                  {entry.description}
+                                </span>
+                                <span className={`font-medium ${entry.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                                  {entry.type === 'income' ? '+' : '-'}{formatCurrency(entry.amount)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
                 ))
               )}
             </TableBody>
@@ -366,15 +476,32 @@ export default function CaixaPage() {
           </thead>
           <tbody>
             {reportTransactions.map(tx => (
-              <tr key={tx.id}>
-                <td className="border p-2">{new Date(tx.timestamp).toLocaleString('pt-BR')}</td>
-                <td className="border p-2">{tx.description}</td>
-                <td className="border p-2">{tx.category}</td>
-                <td className="border p-2">{tx.type === 'income' ? 'ENTRADA' : 'SAÍDA'}</td>
-                <td className="border p-2 text-right">{formatCurrency(tx.amount)}</td>
-                <td className="border p-2">{tx.createdByEmail?.split('@')[0] || "Sistema"}</td>
-                <td className="border p-2 text-[8px] text-gray-400 font-mono">{tx.id}</td>
-              </tr>
+              <React.Fragment key={tx.id}>
+                <tr className="bg-white">
+                  <td className="border p-2">{new Date(tx.timestamp).toLocaleString('pt-BR')}</td>
+                  <td className="border p-2">
+                    <div className="flex items-center gap-1 font-bold">
+                      {tx.description} {tx.isProject ? " (Evento Consolidado)" : ""}
+                    </div>
+                  </td>
+                  <td className="border p-2">{tx.category}</td>
+                  <td className="border p-2">{tx.type === 'income' ? 'ENTRADA' : 'SAÍDA'}</td>
+                  <td className="border p-2 text-right font-bold">{formatCurrency(tx.amount)}</td>
+                  <td className="border p-2">{tx.createdByEmail?.split('@')[0] || "Sistema"}</td>
+                  <td className="border p-2 text-[8px] text-gray-400 font-mono">{tx.id}</td>
+                </tr>
+                {tx.isProject && tx.projectEntries && tx.projectEntries.map((entry: any) => (
+                  <tr key={entry.id || Math.random()} className="bg-gray-100/80 italic text-gray-700">
+                    <td className="border p-2 pl-6 text-gray-500">{new Date(entry.createdAt).toLocaleDateString('pt-BR')}</td>
+                    <td className="border p-2 pl-6">↳ {entry.description}</td>
+                    <td className="border p-2 text-gray-500">Sub-item</td>
+                    <td className="border p-2 text-gray-500">{entry.type === 'income' ? 'GANHO' : 'CUSTO'}</td>
+                    <td className="border p-2 text-right text-gray-500">{formatCurrency(entry.amount)}</td>
+                    <td className="border p-2 text-gray-500">{entry.createdByEmail?.split('@')[0]}</td>
+                    <td className="border p-2"></td>
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
