@@ -17,13 +17,21 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Database URL not configured" }, { status: 500 });
   }
 
+  // Permite passar o secret do DB direto ou via variavel de ambiente (Recomendado)
+  const fireAuth = process.env.FIREBASE_DB_SECRET || searchParams.get("fireauth");
+  const url = fireAuth ? `${dbUrl}/.json?auth=${fireAuth}` : `${dbUrl}/.json`;
+
   try {
-    // Busca todo o banco de dados via REST API do Firebase
-    const response = await fetch(`${dbUrl}/.json`);
+    // Busca todo o banco de dados via REST API do Firebase autenticado
+    const response = await fetch(url);
     const data = await response.json();
 
     if (!data) {
       return NextResponse.json({ message: "No data found" });
+    }
+    
+    if (data.error) {
+      return NextResponse.json({ error: "Firebase Error", details: data }, { status: 403 });
     }
 
     // Formata os objetos do Firebase em Arrays para o Excel/Google Sheets
