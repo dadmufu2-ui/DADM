@@ -15,22 +15,18 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 
   useEffect(() => {
     if (!loading) {
-      // Temporariamente desativado para o esqueleto permitir o teste
-      /*
       if (!user && pathname !== "/login") {
         router.push("/login");
       } else if (user && allowedRoles && !allowedRoles.includes(role)) {
         router.push("/dashboard");
       }
-      */
     }
   }, [user, role, loading, router, pathname, allowedRoles]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Carregando...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-white bg-[#121315]">Carregando sistema...</div>;
   }
 
-  /*
   if (!user && pathname !== "/login") {
     return null; // Will redirect in useEffect
   }
@@ -38,7 +34,6 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   if (user && allowedRoles && !allowedRoles.includes(role)) {
     return null; // Will redirect in useEffect
   }
-  */
 
   return <>{children}</>;
 }
