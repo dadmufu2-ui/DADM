@@ -65,7 +65,7 @@ export default function DashboardPage() {
           <h3 className="text-[11px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase">Balanço Anual {currentYear} (Entradas vs Gastos)</h3>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-white"></span>
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
               <span className="text-[9px] text-gray-500 dark:text-[#8a8a8a] font-bold uppercase tracking-widest">Entradas</span>
             </div>
             <div className="flex items-center gap-2">
@@ -79,9 +79,9 @@ export default function DashboardPage() {
         <div className="h-56 w-full flex items-end justify-between border-b border-gray-200 dark:border-[#2a2c30] pb-2 relative z-10 mt-6">
           {annualData.map((data, i) => (
             <div key={i} className="flex gap-1 h-full items-end group relative w-full justify-center">
-              {/* Income Bar (White) */}
-              <div className="w-2 bg-[#4c4e51] group-hover:bg-white transition-all duration-300 rounded-t-sm relative" style={{ height: `${data.incomePct}%`, minHeight: data.incomePct > 0 ? '4px' : '0' }}>
-                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-white text-black text-[9px] px-2 py-1 rounded shadow-lg font-bold pointer-events-none transition-opacity z-20 whitespace-nowrap">
+              {/* Income Bar (Green) */}
+              <div className="w-2 bg-[#4c4e51] group-hover:bg-green-500 transition-all duration-300 rounded-t-sm relative" style={{ height: `${data.incomePct}%`, minHeight: data.incomePct > 0 ? '4px' : '0' }}>
+                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-green-500 text-white text-[9px] px-2 py-1 rounded shadow-lg font-bold pointer-events-none transition-opacity z-20 whitespace-nowrap">
                   {formatCurrency(data.incomeRaw)}
                 </div>
               </div>

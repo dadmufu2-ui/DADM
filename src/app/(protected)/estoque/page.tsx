@@ -127,9 +127,9 @@ export default function EstoquePage() {
                 <DialogTrigger className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Plus className="w-4 h-4" /> Adicionar Lote
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[500px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[500px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white">
                   <DialogHeader>
-                    <DialogTitle className="text-white font-medium">Novo Lote de Produtos</DialogTitle>
+                    <DialogTitle className="text-gray-900 dark:text-white font-medium">Novo Lote de Produtos</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleAdd} className="space-y-4 mt-4">
                     <div className="space-y-2">
@@ -254,21 +254,21 @@ export default function EstoquePage() {
                       {new Date(item.entryDate).toLocaleDateString('pt-BR')}
                       <div className="text-[9px] opacity-50">{item.createdAtIso?.split('T')[0]}</div>
                     </TableCell>
-                    <TableCell className="font-medium text-white">
+                    <TableCell className="font-medium text-gray-900 dark:text-white">
                       {item.name}
                       <div className="text-[10px] text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">{item.category}</div>
                     </TableCell>
-                    <TableCell className="text-center text-white">{item.quantity}</TableCell>
+                    <TableCell className="text-center text-gray-900 dark:text-white">{item.quantity}</TableCell>
                     <TableCell className="text-right text-gray-500 dark:text-[#8a8a8a] font-medium">
                       {formatCurrency(item.realCostUnit)}
                     </TableCell>
-                    <TableCell className="text-right font-medium text-white">
+                    <TableCell className="text-right font-medium text-gray-900 dark:text-white">
                       {formatCurrency(item.salePrice)}
                     </TableCell>
                     <TableCell className="text-right text-gray-500 dark:text-[#8a8a8a] font-medium">
                       {formatCurrency(item.salePrice - item.realCostUnit)}
                     </TableCell>
-                    <TableCell className="text-right text-white font-medium">
+                    <TableCell className="text-right text-gray-900 dark:text-white font-medium">
                       {formatCurrency(item.expectedProfit)}
                     </TableCell>
                     <TableCell className="text-right">
@@ -365,6 +365,8 @@ export default function EstoquePage() {
     </>
   );
 }
+
+
 
 
 

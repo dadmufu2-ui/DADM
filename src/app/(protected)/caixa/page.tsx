@@ -140,18 +140,18 @@ export default function CaixaPage() {
                 <DialogTrigger className="flex items-center gap-2 bg-gray-900 dark:bg-[#2a2c30] hover:bg-gray-800 dark:hover:bg-[#4c4e51] text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Printer className="w-4 h-4" /> Relatório DRE
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white">
                   <DialogHeader>
-                    <DialogTitle className="text-white font-medium">Gerar Relatório (DRE)</DialogTitle>
+                    <DialogTitle className="text-gray-900 dark:text-white font-medium">Gerar Relatório (DRE)</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 mt-4">
                     <div className="space-y-2">
                       <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Inicial</Label>
-                      <Input type="date" value={reportStartDate} onChange={e => setReportStartDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white" />
+                      <Input type="date" value={reportStartDate} onChange={e => setReportStartDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Data Final</Label>
-                      <Input type="date" value={reportEndDate} onChange={e => setReportEndDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-white" />
+                      <Input type="date" value={reportEndDate} onChange={e => setReportEndDate(e.target.value)} className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white" />
                     </div>
                     <button onClick={handlePrint} className="w-full bg-white text-black py-2 rounded-sm font-bold text-xs uppercase tracking-widest mt-4">
                       Gerar PDF
@@ -166,9 +166,9 @@ export default function CaixaPage() {
                 <DialogTrigger className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                   <Plus className="w-4 h-4" /> Novo Lançamento
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-white">
+                <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white">
                   <DialogHeader>
-                    <DialogTitle className="text-white font-medium">Lançamento Manual</DialogTitle>
+                    <DialogTitle className="text-gray-900 dark:text-white font-medium">Lançamento Manual</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleAdd} className="space-y-4 mt-4">
                     <div className="space-y-2">
@@ -274,7 +274,7 @@ export default function CaixaPage() {
                       {formatDate(tx.timestamp)}
                       <div className="text-[9px] opacity-50">{tx.createdAtIso?.split('T')[0]}</div>
                     </TableCell>
-                    <TableCell className="font-medium text-white">{tx.description}</TableCell>
+                    <TableCell className="font-medium text-gray-900 dark:text-white">{tx.description}</TableCell>
                     <TableCell>
                       <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-wider uppercase border border-gray-200 dark:border-[#2a2c30] bg-white dark:bg-[#151618] px-2 py-1 rounded">
                         {tx.category}
@@ -386,6 +386,8 @@ export default function CaixaPage() {
     </>
   );
 }
+
+
 
 
 
