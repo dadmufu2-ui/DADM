@@ -34,22 +34,83 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Firebase Error", details: data }, { status: 403 });
     }
 
-    // Formata os objetos do Firebase em Arrays para o Excel/Google Sheets
-    const formatToArray = (obj: any) => {
+    // Formata cada coleção para Array de Arrays (Padrão Google Sheets)
+    const formatCaixa = (obj: any) => {
       if (!obj) return [];
-      return Object.keys(obj).map(key => ({
-        id: key,
-        ...obj[key]
-      }));
+      const headers = ["ID", "Data", "Descrição", "Categoria", "Tipo", "Valor", "Autor"];
+      const rows = Object.keys(obj).map(key => {
+        const item = obj[key];
+        return [
+          key,
+          item.timestamp ? new Date(item.timestamp).toLocaleString('pt-BR') : '',
+          item.description || '',
+          item.category || '',
+          item.type === 'income' ? 'ENTRADA' : 'SAÍDA',
+          item.amount || 0,
+          item.createdByEmail || ''
+        ];
+      });
+      return [headers, ...rows];
+    };
+
+    const formatFornecedores = (obj: any) => {
+      if (!obj) return [];
+      const headers = ["ID", "Nome Fantasia", "Documento", "Telefone", "Pedido Mínimo", "Cidade", "Bairro"];
+      const rows = Object.keys(obj).map(key => {
+        const item = obj[key];
+        return [
+          key,
+          item.name || '',
+          item.document || '',
+          item.phone || '',
+          item.minOrder || '',
+          item.address?.city || '',
+          item.address?.neighborhood || ''
+        ];
+      });
+      return [headers, ...rows];
+    };
+
+    const formatReembolsos = (obj: any) => {
+      if (!obj) return [];
+      const headers = ["ID", "Data Solicitação", "Descrição", "Categoria", "Valor", "Solicitante", "Status"];
+      const rows = Object.keys(obj).map(key => {
+        const item = obj[key];
+        return [
+          key,
+          item.timestamp ? new Date(item.timestamp).toLocaleString('pt-BR') : '',
+          item.description || '',
+          item.category || '',
+          item.amount || 0,
+          item.requestedByEmail || '',
+          item.status || ''
+        ];
+      });
+      return [headers, ...rows];
+    };
+
+    const formatUsuarios = (obj: any) => {
+      if (!obj) return [];
+      const headers = ["UID", "Cargo", "Aprovado Por"];
+      const rows = Object.keys(obj).map(key => {
+        const item = obj[key];
+        return [
+          key,
+          item.role || '',
+          item.approvedBy || ''
+        ];
+      });
+      return [headers, ...rows];
     };
 
     const payload = {
-      caixa: formatToArray(data.transactions),
-      fornecedores: formatToArray(data.suppliers),
-      lotes_mcp: formatToArray(data.mcp_batches),
-      reembolsos: formatToArray(data.reimbursements),
-      usuarios: formatToArray(data.roles),
-      projetos: formatToArray(data.projects),
+      caixa: formatCaixa(data.transactions),
+      fornecedores: formatFornecedores(data.suppliers),
+      reembolsos: formatReembolsos(data.reimbursements),
+      usuarios: formatUsuarios(data.roles),
+      // Lotes e Projetos podem ser complexos, mandaremos simplificado
+      lotes_mcp: [["ID"], ...(data.mcp_batches ? Object.keys(data.mcp_batches).map(k => [k]) : [])],
+      projetos: [["ID"], ...(data.projects ? Object.keys(data.projects).map(k => [k]) : [])],
     };
 
     return NextResponse.json(payload);
