@@ -15,6 +15,7 @@ export function Sidebar() {
     : [
         { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
         { name: "PEDIDOS", path: "/pedidos", icon: ShoppingCart },
+        { name: "HISTÓRICO", path: "/historico-pedidos", icon: Receipt },
         { name: "MEMBROS", path: "/members", icon: Users },
         { name: "CAIXA", path: "/caixa", icon: Database },
         { name: "ESTOQUE", path: "/estoque", icon: BarChart3 },

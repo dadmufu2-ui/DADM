@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { useAuth } from "@/contexts/AuthContext";
 import { useInventory } from "@/hooks/useInventory";
 import { useBatchApprovals } from "@/hooks/useBatchApprovals";
+import { useProcessedOrders } from "@/hooks/useProcessedOrders";
 import { Upload, ChevronDown, ChevronUp, Printer, Package, CreditCard, Users, DollarSign, PackagePlus, ShoppingCart } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -14,11 +15,13 @@ export default function PedidosPage() {
   const { role, user } = useAuth();
   const { addItem } = useInventory();
   const { createBatchRequest } = useBatchApprovals();
+  const { addProcessedOrder } = useProcessedOrders();
 
   const [data, setData] = useState<any[]>([]);
   const [expandedCards, setExpandedCards] = useState<string[]>([]);
   const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
   const [isProcessed, setIsProcessed] = useState(false);
+  const [batchName, setBatchName] = useState('');
   
   // State for supplier orders
   const [supplierInputs, setSupplierInputs] = useState<Record<string, { quantity: number, cost: number, expenses: number }>>({});
@@ -127,9 +130,15 @@ export default function PedidosPage() {
 
     // 3. Aguardar a renderização do React (fechar modal e abrir cards)
     setTimeout(async () => {
-      // Calcular sobras para o estoque
+      // Calcular sobras para o estoque e totais para o histórico
       const newStockItems: any[] = [];
+      let calculatedTotalCost = 0;
+      let calculatedTotalExpenses = 0;
+
       Object.entries(supplierInputs).forEach(([prodName, inputs]) => {
+        calculatedTotalCost += inputs.cost;
+        calculatedTotalExpenses += inputs.expenses;
+
         const demandedQty = productsDemanded.find(p => p.name === prodName)?.value || 0;
         const difference = inputs.quantity - demandedQty;
         
@@ -146,6 +155,20 @@ export default function PedidosPage() {
             createdByEmail: user?.email || "unknown@system"
           });
         }
+      });
+
+      // Salvar o histórico do lote
+      await addProcessedOrder({
+        batchName: batchName || `Lote ${new Date().toLocaleDateString('pt-BR')}`,
+        revenue: totalRevenue,
+        totalCost: calculatedTotalCost,
+        totalExpenses: calculatedTotalExpenses,
+        profit: totalRevenue - calculatedTotalCost - calculatedTotalExpenses,
+        items: productsDemanded,
+        buyers: groupedByBuyer,
+        timestamp: Date.now(),
+        createdAtIso: new Date().toISOString(),
+        createdByEmail: user?.email || "unknown@system"
       });
 
       if (newStockItems.length > 0) {
@@ -342,6 +365,15 @@ export default function PedidosPage() {
               Abaixo está o resumo do que foi vendido. Se você for encomendar com o fornecedor uma quantidade MAIOR do que foi vendido, preencha os valores para que a sobra vá direto pro Estoque.
             </p>
             
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase font-bold text-gray-500">Nome do Lote</label>
+              <input 
+                type="text" required placeholder="Ex: Casacos Inverno 2026"
+                value={batchName} onChange={e => setBatchName(e.target.value)}
+                className="w-full h-10 px-3 border border-gray-300 dark:border-[#2a2c30] rounded bg-white dark:bg-[#121315] text-sm"
+              />
+            </div>
+
             <div className="space-y-4">
               {productsDemanded.map(prod => (
                 <div key={prod.name} className="p-4 border border-gray-200 dark:border-[#2a2c30] rounded-lg bg-gray-50 dark:bg-[#121315]">
