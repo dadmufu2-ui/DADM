@@ -1,39 +1,92 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useReimbursements } from "@/hooks/useReimbursements";
-import { Ticket, CheckCircle, XCircle, Clock, Link as LinkIcon, Send } from "lucide-react";
+import { Ticket, CheckCircle, XCircle, Clock, Link as LinkIcon, Send, UploadCloud, Loader2 } from "lucide-react";
 import { useTransactions } from "@/hooks/useTransactions";
 
 export default function ReembolsosPage() {
   const { user, role } = useAuth();
   const { reimbursements, loading, createRequest, updateStatus } = useReimbursements();
   const { addTransaction } = useTransactions();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     description: "",
     amount: "",
     category: "Geral",
-    receiptLink: ""
   });
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.description || !formData.amount || !formData.receiptLink) {
-      alert("Preencha todos os campos obrigatórios.");
+    if (!formData.description || !formData.amount || !file) {
+      alert("Preencha todos os campos obrigatórios e anexe o comprovante.");
       return;
     }
 
-    await createRequest({
-      description: formData.description,
-      amount: parseFloat(formData.amount),
-      category: formData.category,
-      receiptLink: formData.receiptLink,
-      requestedByEmail: user?.email || "unknown@system"
-    });
+    if (file.size > 5 * 1024 * 1024) {
+      alert("O arquivo é muito grande. O tamanho máximo permitido é 5MB.");
+      return;
+    }
 
-    setFormData({ description: "", amount: "", category: "Geral", receiptLink: "" });
-    alert("Pedido enviado! Acompanhe o status nesta página.");
+    setIsUploading(true);
+    try {
+      const base64String = await fileToBase64(file);
+      const base64Data = base64String.split(",")[1];
+      const extension = "." + file.name.split('.').pop();
+      const userName = user?.displayName || user?.email?.split('@')[0] || "Usuario";
+
+      const payload = {
+        base64: base64Data,
+        mimeType: file.type,
+        extension: extension,
+        email: user?.email || "unknown@system",
+        userName: userName,
+        amount: formData.amount
+      };
+
+      const uploadUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwUqb7RYzFFmiJh7DvfTa8tvsfu9HR1xEaqTm8gmU-UPFg-mS0m9D79xfluAZwr1vQ9oQ/exec";
+      
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      
+      const result = await response.json();
+      
+      if (result.status !== "success") {
+        throw new Error("Erro do Google Drive: " + result.message);
+      }
+
+      await createRequest({
+        description: formData.description,
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        receiptLink: result.url,
+        requestedByEmail: user?.email || "unknown@system"
+      });
+
+      setFormData({ description: "", amount: "", category: "Geral" });
+      setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      alert("Pedido enviado! O comprovante foi salvo no Google Drive.");
+    } catch (err: any) {
+      console.error(err);
+      alert("Erro ao enviar: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const formatCurrency = (value: number) => {
@@ -63,19 +116,33 @@ export default function ReembolsosPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Descrição do Gasto</label>
-                <input required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Compra de Copos para a Festa" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+                <input required disabled={isUploading} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Ex: Compra de Copos para a Festa" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500 disabled:opacity-50" />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Valor (R$)</label>
-                <input required type="number" step="0.01" min="0" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="150.50" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+                <input required disabled={isUploading} type="number" step="0.01" min="0" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="150.50" className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500 disabled:opacity-50" />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Link do Comprovante (Nota Fiscal / Recibo)</label>
-              <input required type="url" value={formData.receiptLink} onChange={e => setFormData({...formData, receiptLink: e.target.value})} placeholder="https://drive.google.com/..." className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-indigo-500" />
+              <label className="text-[10px] font-bold text-gray-400 dark:text-[#4c4e51] uppercase tracking-wider">Comprovante (PDF ou Imagem - Máx 5MB)</label>
+              <div className="relative">
+                <input 
+                  required 
+                  disabled={isUploading}
+                  ref={fileInputRef}
+                  type="file" 
+                  accept="image/*,application/pdf"
+                  onChange={e => setFile(e.target.files ? e.target.files[0] : null)}
+                  className="w-full h-10 px-3 pt-1.5 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-500 dark:text-[#8a8a8a] rounded-md text-sm outline-none focus:border-indigo-500 file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-medium file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 dark:file:bg-indigo-500/20 dark:file:text-indigo-300 transition-all disabled:opacity-50 cursor-pointer"
+                />
+              </div>
             </div>
-            <button type="submit" className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium transition-colors text-sm">
-              Enviar Solicitação
+            <button disabled={isUploading} type="submit" className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+              {isUploading ? (
+                <><Loader2 className="w-4 h-4 animate-spin" /> Enviando para o Drive...</>
+              ) : (
+                <><UploadCloud className="w-4 h-4" /> Enviar Solicitação</>
+              )}
             </button>
           </form>
         </div>
