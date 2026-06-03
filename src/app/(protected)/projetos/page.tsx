@@ -152,7 +152,7 @@ export default function ProjetosPage() {
         <DialogContent className="sm:max-w-[650px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white max-h-[90vh] overflow-y-auto">
           {selectedProject && (() => {
             const { income, expense, profit } = calculateTotals(selectedProject.entries);
-            const entriesList = Object.entries(selectedProject.entries).map(([id, val]) => ({ id, ...val })).sort((a,b) => b.createdAt - a.createdAt);
+            const entriesList = Object.entries(selectedProject.entries).map(([id, val]) => ({ ...(val as any), id })).sort((a: any, b: any) => b.createdAt - a.createdAt);
 
             return (
               <>
