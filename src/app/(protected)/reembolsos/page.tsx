@@ -56,7 +56,7 @@ export default function ReembolsosPage() {
         amount: formData.amount
       };
 
-      const uploadUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwUqb7RYzFFmiJh7DvfTa8tvsfu9HR1xEaqTm8gmU-UPFg-mS0m9D79xfluAZwr1vQ9oQ/exec";
+      const uploadUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbyv2Rj5R8xBDTOi3lTGAwfYOiNcyzVzxSoA0lJNfOW5j7TJYWND3FxLL6yLexZt20KxkA/exec";
       
       const response = await fetch(uploadUrl, {
         method: "POST",
