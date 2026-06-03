@@ -64,8 +64,8 @@ export function useInventory() {
     if (!currentItem) return;
 
     const merged = { ...currentItem, ...itemData };
-    const realCostUnit = (merged.baseCost + merged.additionalExpenses) / merged.quantity;
-    const expectedProfit = merged.salePrice - realCostUnit;
+    const realCostUnit = merged.baseCost + (merged.additionalExpenses / merged.quantity);
+    const expectedProfit = (merged.salePrice - realCostUnit) * merged.quantity;
 
     const finalItem = {
       ...itemData,
@@ -85,5 +85,39 @@ export function useInventory() {
     }
   };
 
-  return { items, loading, addItem, updateItem, deleteItem };
+  const dispatchItem = async (id: string, quantityToDeduct: number) => {
+    const currentItem = items.find(i => i.id === id);
+    if (!currentItem) throw new Error("Item não encontrado");
+    
+    if (quantityToDeduct > currentItem.quantity) {
+      throw new Error("Quantidade a retirar maior que o estoque atual");
+    }
+
+    if (quantityToDeduct === currentItem.quantity) {
+      // Retirando tudo, apenas exclui o registro para limpar o DB
+      await deleteItem(id);
+      return currentItem;
+    }
+
+    const newQuantity = currentItem.quantity - quantityToDeduct;
+    const proportion = newQuantity / currentItem.quantity;
+    
+    // Ajustar despesas adicionais proporcionalmente
+    const newAdditionalExpenses = currentItem.additionalExpenses * proportion;
+    
+    const realCostUnit = currentItem.baseCost + (newAdditionalExpenses / newQuantity);
+    const expectedProfit = (currentItem.salePrice - realCostUnit) * newQuantity;
+
+    const itemRef = ref(database, `inventory/${id}`);
+    await update(itemRef, {
+      quantity: newQuantity,
+      additionalExpenses: newAdditionalExpenses,
+      realCostUnit,
+      expectedProfit
+    });
+
+    return currentItem; // Retorna o estado antes da redução para usar os valores de venda no Caixa
+  };
+
+  return { items, loading, addItem, updateItem, deleteItem, dispatchItem };
 }

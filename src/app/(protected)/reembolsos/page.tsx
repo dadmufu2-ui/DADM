@@ -3,10 +3,12 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useReimbursements } from "@/hooks/useReimbursements";
 import { Ticket, CheckCircle, XCircle, Clock, Link as LinkIcon, Send } from "lucide-react";
+import { useTransactions } from "@/hooks/useTransactions";
 
 export default function ReembolsosPage() {
   const { user, role } = useAuth();
   const { reimbursements, loading, createRequest, updateStatus } = useReimbursements();
+  const { addTransaction } = useTransactions();
 
   const [formData, setFormData] = useState({
     description: "",
@@ -129,7 +131,23 @@ export default function ReembolsosPage() {
                       <td className="px-6 py-4 flex gap-2 justify-end">
                         {req.status === 'pendente' ? (
                           <>
-                            <button onClick={() => updateStatus(req.id, "aprovado")} className="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded font-medium">
+                            <button 
+                              onClick={async () => {
+                                await updateStatus(req.id, "aprovado");
+                                await addTransaction({
+                                  description: `Reembolso: ${req.description}`,
+                                  amount: req.amount,
+                                  type: 'expense',
+                                  date: Date.now(),
+                                  category: 'Reembolsos',
+                                  createdByEmail: user?.email || "unknown@system",
+                                  timestamp: Date.now(),
+                                  createdAtIso: new Date().toISOString()
+                                });
+                                alert("Reembolso aprovado e debitado do caixa!");
+                              }} 
+                              className="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded font-medium"
+                            >
                               Aprovar
                             </button>
                             <button onClick={() => updateStatus(req.id, "recusado")} className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded font-medium">

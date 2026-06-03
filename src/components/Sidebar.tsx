@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket } from "lucide-react";
+import { LayoutDashboard, Receipt, Wallet, Package2, LogOut, Settings, Users, Database, BarChart3, Ticket, ShoppingCart } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -14,6 +14,7 @@ export function Sidebar() {
       ]
     : [
         { name: "PAINEL", path: "/dashboard", icon: LayoutDashboard },
+        { name: "PEDIDOS", path: "/pedidos", icon: ShoppingCart },
         { name: "MEMBROS", path: "/members", icon: Users },
         { name: "CAIXA", path: "/caixa", icon: Database },
         { name: "ESTOQUE", path: "/estoque", icon: BarChart3 },

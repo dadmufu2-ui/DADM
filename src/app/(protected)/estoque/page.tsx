@@ -4,7 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useInventory } from "@/hooks/useInventory";
 import { useCategories } from "@/hooks/useCategories";
 import { useDeleteRequests } from "@/hooks/useDeleteRequests";
-import { Plus, Trash2, Package, Printer, ShieldAlert } from "lucide-react";
+import { useTransactions } from "@/hooks/useTransactions";
+import { Plus, Trash2, Package, Printer, ShieldAlert, PackageMinus } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -22,14 +23,22 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useBatchApprovals } from "@/hooks/useBatchApprovals";
 
 export default function EstoquePage() {
   const { role, user } = useAuth();
-  const { items, loading, addItem, deleteItem } = useInventory();
+  const { items, loading, addItem, deleteItem, dispatchItem } = useInventory();
   const { categories, addCategory } = useCategories("estoque");
+  const { addTransaction } = useTransactions();
+  const { batches, updateBatchStatus } = useBatchApprovals();
   
   const [isOpen, setIsOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+
+  const [isDispatchOpen, setIsDispatchOpen] = useState(false);
+  const [dispatchItemData, setDispatchItemData] = useState<any>(null);
+  const [dispatchQty, setDispatchQty] = useState(1);
+  const [dispatchReason, setDispatchReason] = useState("venda");
 
   const { createRequest } = useDeleteRequests();
 
@@ -87,6 +96,39 @@ export default function EstoquePage() {
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  };
+
+  const handleDispatch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!dispatchItemData || dispatchQty <= 0) return;
+
+    try {
+      // Retira do estoque
+      const originalItem = await dispatchItem(dispatchItemData.id, dispatchQty);
+      
+      // Se for venda, adiciona no caixa automaticamente
+      if (dispatchReason === "venda") {
+        const totalSale = originalItem.salePrice * dispatchQty;
+        await addTransaction({
+          description: `Venda: ${originalItem.name} (${dispatchQty}x)`,
+          amount: totalSale,
+          type: 'income',
+          date: Date.now(),
+          category: 'Vendas de Estoque',
+          createdByEmail: user?.email || "unknown@system",
+          timestamp: Date.now(),
+          createdAtIso: new Date().toISOString()
+        });
+      }
+      
+      setIsDispatchOpen(false);
+      setDispatchItemData(null);
+      setDispatchQty(1);
+      setDispatchReason("venda");
+      alert("Saída registrada com sucesso!");
+    } catch (error: any) {
+      alert("Erro ao registrar saída: " + error.message);
+    }
   };
 
   const getFontSize = (value: number) => {
@@ -273,28 +315,42 @@ export default function EstoquePage() {
                     </TableCell>
                     <TableCell className="text-right">
                       {(role === "tesoureiro" || role === "coordenador") && (
-                        <button 
-                          onClick={async () => {
-                            if (role === "tesoureiro") {
-                              if (confirm("Excluir definitivamente este lote?")) deleteItem(item.id);
-                            } else {
-                              const reason = prompt("Justificativa para solicitar exclusão deste item:");
-                              if (reason) {
-                                await createRequest({
-                                  collection: "estoque",
-                                  itemId: item.id,
-                                  itemNameOrDesc: `Estoque: ${item.name} (${item.quantity}un) - Motivo: ${reason}`,
-                                  requestedByEmail: user?.email || "unknown"
-                                });
-                                alert("Pedido de exclusão enviado para a Tesouraria.");
+                        <div className="flex justify-end gap-1">
+                          <button
+                            onClick={() => {
+                              setDispatchItemData(item);
+                              setDispatchQty(1);
+                              setIsDispatchOpen(true);
+                            }}
+                            className="p-2 transition-colors text-indigo-400 hover:text-indigo-500"
+                            title="Dar Baixa (Saída)"
+                          >
+                            <PackageMinus className="w-4 h-4" />
+                          </button>
+
+                          <button 
+                            onClick={async () => {
+                              if (role === "tesoureiro") {
+                                if (confirm("Excluir definitivamente este lote?")) deleteItem(item.id);
+                              } else {
+                                const reason = prompt("Justificativa para solicitar exclusão deste item:");
+                                if (reason) {
+                                  await createRequest({
+                                    collection: "estoque",
+                                    itemId: item.id,
+                                    itemNameOrDesc: `Estoque: ${item.name} (${item.quantity}un) - Motivo: ${reason}`,
+                                    requestedByEmail: user?.email || "unknown"
+                                  });
+                                  alert("Pedido de exclusão enviado para a Tesouraria.");
+                                }
                               }
-                            }
-                          }}
-                          className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
-                          title={role === 'tesoureiro' ? "Excluir Lote" : "Solicitar Exclusão"}
-                        >
-                          {role === 'tesoureiro' ? <Trash2 className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
-                        </button>
+                            }}
+                            className={`p-2 transition-colors ${role === 'tesoureiro' ? 'text-gray-400 dark:text-[#4c4e51] hover:text-red-500' : 'text-gray-400 dark:text-[#4c4e51] hover:text-amber-500'}`}
+                            title={role === 'tesoureiro' ? "Excluir Lote" : "Solicitar Exclusão"}
+                          >
+                            {role === 'tesoureiro' ? <Trash2 className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
+                          </button>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>
@@ -304,6 +360,121 @@ export default function EstoquePage() {
           </Table>
         </div>
       </div>
+
+      <Dialog open={isDispatchOpen} onOpenChange={setIsDispatchOpen}>
+        <DialogContent className="sm:max-w-[400px] bg-white dark:bg-[#1e2023] border-gray-200 dark:border-[#2a2c30]">
+          <DialogHeader>
+            <DialogTitle className="text-gray-900 dark:text-white font-medium">Dar Baixa no Estoque</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleDispatch} className="space-y-4 mt-4">
+            <p className="text-sm text-gray-500 dark:text-[#8a8a8a]">
+              Retirar itens do lote <strong className="text-gray-900 dark:text-white">{dispatchItemData?.name}</strong>. Estoque atual: {dispatchItemData?.quantity}
+            </p>
+            
+            <div className="space-y-2">
+              <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Quantidade a Retirar</Label>
+              <Input 
+                type="number" 
+                min="1" 
+                max={dispatchItemData?.quantity || 1} 
+                required 
+                value={dispatchQty} 
+                onChange={e => setDispatchQty(Number(e.target.value))} 
+                className="bg-gray-50 dark:bg-[#121315] border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white focus-visible:ring-[#4c4e51]" 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-gray-400 dark:text-[#4c4e51] font-bold text-[10px] uppercase tracking-wider">Motivo da Saída</Label>
+              <select 
+                required 
+                value={dispatchReason} 
+                onChange={e => setDispatchReason(e.target.value)} 
+                className="w-full h-10 px-3 bg-gray-50 dark:bg-[#121315] border border-gray-200 dark:border-[#2a2c30] text-gray-900 dark:text-white rounded-md text-sm outline-none focus:border-[#4c4e51]"
+              >
+                <option value="venda">Venda (Gera Receita no Caixa)</option>
+                <option value="descarte">Descarte / Perda</option>
+                <option value="uso_interno">Uso Interno</option>
+              </select>
+            </div>
+
+            <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-sm font-bold text-xs uppercase tracking-widest mt-4 transition-colors">
+              Confirmar Saída
+            </button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {role === "tesoureiro" && batches.filter(b => b.status === "pendente").length > 0 && (
+        <div className="bg-white dark:bg-[#1e2023] border border-amber-500/50 p-6 rounded-lg mt-8 no-print animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <h2 className="text-gray-900 dark:text-white font-medium mb-4 flex items-center gap-2 text-amber-500"><ShieldAlert className="w-4 h-4" /> Lotes de Suprimentos Pendentes de Aprovação</h2>
+          <div className="space-y-4">
+            {batches.filter(b => b.status === "pendente").map(batch => (
+              <div key={batch.id} className="border border-gray-200 dark:border-[#2a2c30] rounded-md p-4 bg-gray-50 dark:bg-[#121315]">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <span className="text-xs text-gray-500 font-medium">Lote #{batch.id.substring(1, 6)}</span>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">Enviado por: {batch.requestedByEmail}</p>
+                    <p className="text-xs text-gray-500">{new Date(batch.timestamp).toLocaleString('pt-BR')}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={async () => {
+                        try {
+                          for (const item of batch.items) {
+                            await addItem(item);
+                          }
+                          await updateBatchStatus(batch.id, "aprovado");
+                          alert("Lote aprovado e itens adicionados ao estoque!");
+                        } catch (e: any) {
+                          alert("Erro ao aprovar lote: " + e.message);
+                        }
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 text-xs rounded font-medium"
+                    >
+                      Aprovar e Estocar
+                    </button>
+                    <button 
+                      onClick={async () => {
+                        if (confirm("Recusar este lote? Ele não entrará no estoque.")) {
+                          await updateBatchStatus(batch.id, "recusado");
+                        }
+                      }}
+                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 text-xs rounded font-medium"
+                    >
+                      Recusar
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left">
+                    <thead className="text-[10px] uppercase text-gray-500 bg-white dark:bg-[#1e2023]">
+                      <tr>
+                        <th className="px-3 py-2">Produto</th>
+                        <th className="px-3 py-2">Qtd</th>
+                        <th className="px-3 py-2">Custo Un.</th>
+                        <th className="px-3 py-2">Desp. Extra</th>
+                        <th className="px-3 py-2">Preço Venda</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {batch.items.map((item, idx) => (
+                        <tr key={idx} className="border-t border-gray-200 dark:border-[#2a2c30]">
+                          <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{item.name}</td>
+                          <td className="px-3 py-2 text-gray-500">{item.quantity}</td>
+                          <td className="px-3 py-2 text-gray-500">{formatCurrency(item.baseCost)}</td>
+                          <td className="px-3 py-2 text-gray-500">{formatCurrency(item.additionalExpenses)}</td>
+                          <td className="px-3 py-2 text-gray-500">{formatCurrency(item.salePrice)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ÁREA DE IMPRESSÃO (INVENTÁRIO PDF) */}
       <div className="hidden print-only print:block text-black p-8 font-sans">
@@ -365,6 +536,7 @@ export default function EstoquePage() {
     </>
   );
 }
+
 
 
 
