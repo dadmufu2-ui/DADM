@@ -30,7 +30,7 @@ export function Header() {
       </div>
       
       <div className="flex flex-row items-center justify-between w-full md:w-auto md:gap-8">
-        {role !== 'usuario' && (
+        {(role === 'tesoureiro' || role === 'coordenador') && (
           <div className="flex flex-col items-start md:items-end text-left md:text-right">
             <span className="text-[10px] font-bold text-gray-500 dark:text-[#8a8a8a] tracking-[0.2em] uppercase mb-1">Saldo Consolidado</span>
             <h2 className="text-[20px] md:text-[26px] font-medium text-gray-900 dark:text-white tracking-wide flex items-center gap-2 md:gap-3">
