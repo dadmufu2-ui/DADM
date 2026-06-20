@@ -141,6 +141,8 @@ export default function ConfiguracoesPage() {
                           className="bg-gray-50 dark:bg-[#121315] border border-[#4c4e51] text-gray-900 dark:text-white text-xs rounded px-2 py-1 outline-none focus:border-indigo-500"
                         >
                           <option value="usuario">Usuário Comum</option>
+                          <option value="usuario_area">Usuário de Projetos</option>
+                          <option value="adm_area">Adm de Projetos</option>
                           <option value="coordenador">Coordenador</option>
                           <option value="tesoureiro">Tesoureiro</option>
                         </select>
