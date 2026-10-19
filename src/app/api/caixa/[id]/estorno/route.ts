@@ -21,11 +21,6 @@ export async function POST(request: Request, context: Context) {
       || original.reversesTransactionId || original.isProject || original.reimbursementId) {
       return NextResponse.json({ error: "Lançamento não elegível para estorno automático." }, { status: 409 });
     }
-    const reserve = (await database.ref("reserve_account").get()).val();
-    if (reserve?.allocations?.[id] || Object.values(reserve?.releases || {}).some((value) =>
-      value && typeof value === "object" && "transactionId" in value && value.transactionId === id)) {
-      return NextResponse.json({ error: "Lançamento vinculado à reserva exige conciliação específica antes do estorno." }, { status: 409 });
-    }
     const reversalId = `reversal_${id}`;
     const now = Date.now();
     const result = await database.ref(`transactions/${reversalId}`).transaction((current) => current === null ? {
