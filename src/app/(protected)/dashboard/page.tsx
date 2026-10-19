@@ -69,8 +69,8 @@ export default function DashboardPage() {
   const projectedBalanceCents = closedCashCents + projectContributionCents;
 
   return (
-    <div className="space-y-8 pb-12">
-      <section aria-labelledby="pending-heading">
+    <div className="flex flex-col gap-8 px-4 pb-12 md:gap-12">
+      <section aria-labelledby="pending-heading" className="order-2">
         <h1 id="pending-heading" className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">Pendências da Tesouraria</h1>
         <div className="grid gap-3 sm:grid-cols-3">
           {[
@@ -85,7 +85,7 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
-      <section aria-labelledby="projection-heading" className="space-y-4">
+      <section aria-labelledby="projection-heading" className="order-3 space-y-4">
         <div>
           <h2 id="projection-heading" className="text-xl font-semibold text-gray-900 dark:text-white">Caixa e projetos em andamento</h2>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">A projeção soma ganhos e desconta gastos dos projetos abertos ou pendentes. Ela não altera os lançamentos do Caixa.</p>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
         </div>
       </section>
       {/* First Row of Charts */}
-      <div className="space-y-6 bg-white dark:bg-[#151618] p-4 sm:p-8 rounded-xl border border-gray-200 dark:border-[#1e1f22] shadow-sm relative overflow-hidden">
+      <div className="order-1 space-y-8 overflow-hidden rounded-xl border border-gray-200 bg-white p-8 shadow-2xl dark:border-[#1e1f22] dark:bg-[#151618]">
         {/* Subtle background grid pattern removed as requested */}
         <div className="flex flex-wrap items-center justify-between gap-3 relative z-10">
           <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Balanço anual {currentYear}: entradas e gastos</h2>
@@ -155,7 +155,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Second Row of Line Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="order-4 grid grid-cols-1 gap-8 md:grid-cols-3">
         {[
           { 
             title: "RECEITA BRUTA (ÚLTIMOS 30 DIAS)", 

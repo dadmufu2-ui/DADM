@@ -13,7 +13,7 @@ export function Header() {
   return (
     <header className="h-auto md:h-32 bg-transparent flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 z-10 w-full pt-6 pb-8 md:pb-0 gap-6 md:gap-0 shrink-0 print:hidden">
       <div className="flex flex-col w-full md:w-auto mt-4 md:mt-0">
-        <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase mb-1">Equipe Financeira</span>
+        <span className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 dark:text-[#8a8a8a]">Equipe Financeira</span>
         <h2 className="text-[22px] md:text-[26px] font-medium text-gray-900 dark:text-white tracking-wide break-words">
           Bem-vindo, {displayName}.
         </h2>
@@ -43,8 +43,8 @@ function HeaderBalance() {
 
   return (
     <div className="flex flex-col items-start text-left md:items-end md:text-right">
-      <span className="mb-1 text-xs font-semibold uppercase text-gray-600 dark:text-gray-300">Saldo registrado</span>
-      <p className="text-xl font-medium text-gray-900 dark:text-white md:text-2xl" aria-live="polite">{loading ? "Carregando saldo…" : balance}</p>
+      <span className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 dark:text-[#8a8a8a]">Saldo consolidado</span>
+      <p className="text-xl font-medium tracking-wide text-gray-900 dark:text-white md:text-2xl" aria-live="polite">{loading ? "Carregando saldo…" : balance}</p>
     </div>
   );
 }
